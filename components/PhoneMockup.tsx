@@ -104,6 +104,11 @@ export default function PhoneMockup() {
           </div>
         </div>
       </div>
+
+      {/* understated label so the figures read as an illustration, not real metrics */}
+      <p className="mt-3 text-center font-mono text-[11px] text-ink-3">
+        Sample workspace · UI preview
+      </p>
     </div>
   );
 }
