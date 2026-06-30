@@ -222,9 +222,10 @@ export default function Home() {
               >
                 Email me
               </a>
-              {/* TODO: link résumé PDF */}
               <a
-                href="#"
+                href="/resume/Pranav-Shukla-Resume.pdf"
+                target="_blank"
+                rel="noreferrer noopener"
                 className="inline-flex items-center gap-2 rounded-full border border-line-strong bg-surface px-5 py-3 font-mono text-[13px] text-ink transition-colors hover:border-accent hover:text-accent"
               >
                 Résumé (PDF)
