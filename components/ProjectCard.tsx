@@ -41,6 +41,10 @@ export default function ProjectCard({ project }: { project: ProjectData }) {
         </div>
       )}
 
+      {project.why && (
+        <p className="mt-4 text-[14px] leading-relaxed text-ink-3">{project.why}</p>
+      )}
+
       <div className="mt-6 flex flex-wrap gap-2">
         {project.chips.map((chip) => (
           <Chip key={chip}>{chip}</Chip>

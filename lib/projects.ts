@@ -10,8 +10,10 @@ export interface ProjectData {
   description: string;
   chips: string[];
   badge?: { label: string; variant: BadgeVariant; pulse?: boolean };
-  /** Extra accent-washed callout (Sleep Apnea). */
+  /** Extra accent-washed callout box — unique to Sleep Apnea. */
   callout?: string;
+  /** Plain muted "why it matters" supporting paragraph (Research & projects). */
+  why?: string;
   link?: { href: string; label: string; external?: boolean };
   featured?: boolean;
 }
@@ -35,6 +37,7 @@ export const PROJECTS: ProjectData[] = [
     tag: "Training pipeline that detects failures and recovers itself",
     description:
       "Automated training pipeline that detects failures and recovers without manual intervention — retraining, rollback, and alerting built in.",
+    why: "Models don't fail loudly — they rot. Inputs drift away from the training distribution and accuracy slips for weeks before anyone notices. I built this so the pipeline watches its own data, catches drift statistically, and retrains itself before degradation ever reaches users — making reliability a property of the system instead of a fire drill.",
     chips: ["Python", "Docker", "CI/CD"],
   },
   {
@@ -56,6 +59,7 @@ export const PROJECTS: ProjectData[] = [
     tag: "Flags high-risk pregnancies early from routine clinical data",
     description:
       "Predicts pre-eclampsia risk from routine clinical features — one of the leading causes of maternal mortality worldwide. Built to flag high-risk pregnancies early enough for intervention to change the outcome.",
+    why: "Pre-eclampsia is one of the leading causes of maternal death, and the hard part is that it's often catchable — the signal sits in routine checkup data well before it becomes an emergency. I built this to surface that risk early, from features clinicians already collect, so intervention can happen while it still changes the outcome.",
     chips: ["scikit-learn", "Pandas", "Feature eng."],
     badge: { label: "Maternal health", variant: "warm" },
   },
