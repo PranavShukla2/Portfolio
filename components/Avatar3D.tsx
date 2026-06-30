@@ -1,12 +1,31 @@
+"use client";
+
+import { useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
+
+const MESSAGES = [
+  "Hi, I'm Pranav 👋",
+  "wheee! 🌀",
+  "spin me again!",
+  "ship it 🚀",
+  "still dizzy 😵‍💫",
+  "okay, one more 😄",
+];
+
 /**
  * Articulated SVG avatar of Pranav. Built from grouped parts so each limb
  * animates on its own joint: the body bobs, legs swing, the left arm sways,
- * the right arm waves, and an eye blinks. All motion is CSS-driven and is
- * disabled under prefers-reduced-motion (see globals.css).
+ * the right arm waves, and an eye blinks (all CSS-driven, disabled under
+ * prefers-reduced-motion). Bonus: click it and it does a full spin while the
+ * speech bubble cycles through silly lines.
  */
 export default function Avatar3D() {
+  const reduce = useReducedMotion();
+  const [clicks, setClicks] = useState(0);
+  const message = MESSAGES[clicks % MESSAGES.length];
+
   return (
-    <div className="relative mx-auto w-[240px] max-w-full sm:w-[300px]">
+    <div className="relative mx-auto w-[240px] max-w-full [perspective:900px] sm:w-[300px]">
       {/* soft candy glow behind the character */}
       <div
         className="absolute inset-0 -z-10 scale-90 rounded-full bg-[radial-gradient(circle_at_50%_40%,var(--accent-wash),var(--accent-2-wash)_55%,transparent_72%)] blur-2xl"
@@ -15,11 +34,27 @@ export default function Avatar3D() {
 
       {/* speech bubble — sits by the waving hand (upper-left) */}
       <div className="absolute left-0 top-6 z-10 rounded-2xl rounded-bl-sm bg-candy px-3 py-1.5 shadow-lg">
-        <span className="font-mono text-[12px] font-medium text-white">
-          Hi, I&apos;m Pranav 👋
-        </span>
+        <motion.span
+          key={clicks}
+          initial={reduce ? false : { scale: 0.7, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ type: "spring", stiffness: 500, damping: 18 }}
+          className="block font-mono text-[12px] font-medium text-white"
+        >
+          {message}
+        </motion.span>
       </div>
 
+      <motion.button
+        type="button"
+        onClick={() => setClicks((c) => c + 1)}
+        aria-label="Wave back — click the avatar to make it spin"
+        title="psst… click me"
+        className="block w-full cursor-pointer appearance-none border-0 bg-transparent p-0 [transform-style:preserve-3d]"
+        animate={reduce ? undefined : { rotateY: clicks * 360 }}
+        whileTap={reduce ? undefined : { scale: 0.93 }}
+        transition={{ rotateY: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } }}
+      >
       <svg
         viewBox="0 0 220 290"
         className="w-full"
@@ -118,6 +153,7 @@ export default function Avatar3D() {
           <path d="M99 131 q11 6 22 0" fill="#ffffff" opacity="0.9" />
         </g>
       </svg>
+      </motion.button>
     </div>
   );
 }
