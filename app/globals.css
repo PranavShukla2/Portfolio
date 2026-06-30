@@ -1,0 +1,240 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Design tokens — "Gradient Candy" ──────────────────────────── */
+:root {
+  --bg: #fff6f6;
+  --surface: #ffffff;
+  --line: rgba(132, 94, 194, 0.14);
+  --line-strong: rgba(132, 94, 194, 0.28);
+
+  --ink: #2b1b3d;
+  --ink-2: #6b5b7b;
+  --ink-3: #9a8caa;
+
+  /* primary — pink */
+  --accent: #ff4e9b;
+  --accent-bright: #ff6b6b;
+  --accent-wash: rgba(255, 78, 155, 0.1);
+
+  /* secondary — purple */
+  --accent-2: #845ec2;
+  --accent-2-bright: #9a78d6;
+  --accent-2-wash: rgba(132, 94, 194, 0.12);
+
+  /* tertiary — orange / coral */
+  --accent-3: #ffb347;
+  --accent-3-wash: rgba(255, 179, 71, 0.16);
+  --coral: #ff6b6b;
+
+  /* signature gradient */
+  --candy: linear-gradient(135deg, #ff6b6b, #ff4e9b, #845ec2);
+
+  /* terminal */
+  --term-bg: #17121f;
+  --term-line: #2e2440;
+}
+
+/* ─── Base ──────────────────────────────────────────────────────── */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  body {
+    background-color: var(--bg);
+    background-image:
+      radial-gradient(58rem 40rem at 82% -8%, var(--accent-wash), transparent 60%),
+      radial-gradient(46rem 34rem at -6% 6%, var(--accent-2-wash), transparent 58%),
+      radial-gradient(40rem 30rem at 50% 110%, var(--accent-3-wash), transparent 60%);
+    background-attachment: fixed;
+    color: var(--ink);
+    font-family: theme("fontFamily.sans");
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  ::selection {
+    background: var(--accent-wash);
+    color: var(--accent);
+  }
+}
+
+/* ─── Utilities ─────────────────────────────────────────────────── */
+@layer utilities {
+  .bg-candy {
+    background-image: var(--candy);
+  }
+  .text-candy {
+    background-image: var(--candy);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .border-candy {
+    border-image: var(--candy) 1;
+  }
+}
+
+/* ─── Micro-animation ───────────────────────────────────────────── */
+
+@keyframes ping-soft {
+  75%,
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+.animate-ping-soft {
+  animation: ping-soft 1.6s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes cursor-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+.animate-cursor {
+  animation: cursor-blink 1s step-end infinite;
+}
+
+/* Faint waveform drift inside the sleep-apnea demo panel */
+@keyframes osc-drift {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.animate-osc {
+  animation: osc-drift 9s linear infinite;
+}
+
+/* Gentle float (phone mockup) */
+.animate-float {
+  animation: float 5.5s ease-in-out infinite;
+}
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-9px);
+  }
+}
+
+/* ─── Avatar rig ────────────────────────────────────────────────── */
+.char-bob {
+  animation: char-bob 4.5s ease-in-out infinite;
+}
+@keyframes char-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-7px);
+  }
+}
+
+.char-wave {
+  transform-box: fill-box;
+  transform-origin: 50% 92%;
+  animation: char-wave 0.85s ease-in-out infinite;
+}
+@keyframes char-wave {
+  0%,
+  100% {
+    transform: rotate(-14deg);
+  }
+  50% {
+    transform: rotate(26deg);
+  }
+}
+
+.char-arm-l {
+  transform-box: fill-box;
+  transform-origin: 50% 8%;
+  animation: char-sway 3.4s ease-in-out infinite;
+}
+@keyframes char-sway {
+  0%,
+  100% {
+    transform: rotate(4deg);
+  }
+  50% {
+    transform: rotate(-5deg);
+  }
+}
+
+.char-leg-l {
+  transform-box: fill-box;
+  transform-origin: 50% 6%;
+  animation: char-leg 3.4s ease-in-out infinite;
+}
+.char-leg-r {
+  transform-box: fill-box;
+  transform-origin: 50% 6%;
+  animation: char-leg 3.4s ease-in-out infinite reverse;
+}
+@keyframes char-leg {
+  0%,
+  100% {
+    transform: rotate(-5deg);
+  }
+  50% {
+    transform: rotate(5deg);
+  }
+}
+
+.char-blink {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: char-blink 5s infinite;
+}
+@keyframes char-blink {
+  0%,
+  94%,
+  100% {
+    transform: scaleY(1);
+  }
+  97% {
+    transform: scaleY(0.1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-ping-soft,
+  .animate-cursor,
+  .animate-osc,
+  .animate-float,
+  .char-bob,
+  .char-wave,
+  .char-arm-l,
+  .char-leg-l,
+  .char-leg-r,
+  .char-blink {
+    animation: none;
+  }
+}
