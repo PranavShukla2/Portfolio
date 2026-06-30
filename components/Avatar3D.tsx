@@ -111,12 +111,6 @@ export default function Avatar3D() {
           <path d="M104 142 l6 9 l6 -9" fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth="2.4" strokeLinecap="round" />
           <line x1="110" y1="153" x2="110" y2="196" stroke="rgba(255,255,255,0.35)" strokeWidth="2" strokeLinecap="round" />
 
-          {/* ── right arm (waves) ── */}
-          <g className="char-wave">
-            <rect x="70" y="92" width="14" height="74" rx="7" fill="url(#shirtGrad)" />
-            <circle cx="77" cy="92" r="9.5" fill="url(#faceShade)" />
-          </g>
-
           {/* ── neck ── */}
           <rect x="101" y="132" width="18" height="16" rx="6" fill="#eeb98c" />
 
@@ -151,6 +145,12 @@ export default function Avatar3D() {
           {/* smile */}
           <path d="M95 130 q15 16 30 0 q-15 7 -30 0 z" fill="#2b1b3d" />
           <path d="M99 131 q11 6 22 0" fill="#ffffff" opacity="0.9" />
+
+          {/* ── right arm (waves) — drawn last so the raised hand is in front of the head ── */}
+          <g className="char-wave">
+            <rect x="67" y="92" width="14" height="74" rx="7" fill="url(#shirtGrad)" />
+            <circle cx="74" cy="92" r="9.5" fill="url(#faceShade)" />
+          </g>
         </g>
       </svg>
       </motion.button>
