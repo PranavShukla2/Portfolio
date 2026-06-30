@@ -15,7 +15,7 @@ const STACK = [
     grad: "linear-gradient(135deg,#ff6b6b,#ffb347)",
     color: "#e2563b",
     wash: "rgba(255,107,107,0.12)",
-    items: ["Python", "TypeScript", "SQL", "JavaScript"],
+    items: ["Python", "TypeScript", "JavaScript", "Java", "C++", "SQL"],
   },
   {
     title: "Frontend",
