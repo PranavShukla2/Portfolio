@@ -20,13 +20,13 @@ const caveat = Caveat({
 });
 
 export const metadata: Metadata = {
-  title: "Pranav — I build systems that read signal out of messy data",
+  title: "Pranav Shukla — Applied ML & Full-stack Engineer",
   description:
     "CS undergrad and builder shipping across applied ML (healthcare biosignals) and full-stack SaaS. Open to SWE internships, 2026.",
   openGraph: {
     title: "Pranav — Software Engineer",
     description:
-      "Shipping across applied ML and full-stack SaaS. Reading signal out of noise.",
+      "Shipping across applied ML and full-stack SaaS — from healthcare biosignals to multi-tenant analytics in production.",
     type: "website",
   },
 };

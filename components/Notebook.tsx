@@ -42,9 +42,8 @@ export default function Notebook() {
 
           <ul className="mt-5 space-y-[11px] text-[23px] leading-snug">
             <li>
-              1. find the{" "}
-              <mark className="rounded bg-accent-3/55 px-1 text-ink">signal</mark> in the
-              noise
+              1. find what actually{" "}
+              <mark className="rounded bg-accent-3/55 px-1 text-ink">matters</mark>
             </li>
             <li>2. ship the smallest thing that actually works</li>
             <li>3. put it in front of real users, fast</li>

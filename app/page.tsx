@@ -85,11 +85,11 @@ export default function Home() {
                   <span className="font-medium text-ink">running in front of real users</span>.
                 </p>
                 <p>
-                  My work pulls signal out of noise — across biosignals and
-                  product analytics. One day it&apos;s a CNN reading single-lead
+                  My work spans two worlds — healthcare biosignals and product
+                  analytics. One day it&apos;s a CNN reading single-lead
                   physiological data; the next it&apos;s per-tenant isolation in an
-                  analytics SaaS. The common thread is reading what matters out of
-                  mess.
+                  analytics SaaS. The throughline is the same: turn a hard,
+                  real-world problem into a working system people rely on.
                 </p>
                 <p>
                   I gravitate to early-stage teams where shipping is the job.
@@ -141,9 +141,9 @@ export default function Home() {
                 How I think about building.
               </h2>
               <p className="mt-4 max-w-md text-[17px] leading-relaxed text-ink-2">
-                No grand process — just a loop I trust. Find the signal, ship the
-                smallest real thing, put it in front of people, and tighten it
-                from there.
+                No grand process — just a loop I trust: figure out what actually
+                matters, ship the smallest real thing, put it in front of people,
+                and tighten it from there.
               </p>
             </div>
           </Reveal>
