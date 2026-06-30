@@ -2,7 +2,7 @@
 
 This is my personal developer portfolio. I'm a CS undergrad and builder, and I ship across applied ML (healthcare biosignals) and full-stack SaaS. I built this site to show — not just tell — that I can take an ambiguous problem and turn it into something that runs.
 
-**Live:** _add your Vercel URL here_
+**Live:** https://psportfolio-lyart.vercel.app/
 
 ## What it is
 
