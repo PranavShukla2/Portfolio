@@ -27,7 +27,7 @@ export default function Hero() {
 
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <Link
-                href="#terminal"
+                href="#work"
                 className="inline-flex items-center gap-2 rounded-full bg-candy px-5 py-3 font-mono text-[13px] text-white shadow-md shadow-accent/20 transition-transform hover:-translate-y-0.5 motion-reduce:hover:translate-y-0"
               >
                 See selected work →

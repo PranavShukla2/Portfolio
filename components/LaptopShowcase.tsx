@@ -138,9 +138,9 @@ export default function LaptopShowcase() {
             Browse my work the coder&apos;s way.
           </h2>
           <p className="mt-3 text-[15px] text-ink-2">
-            Open the laptop, then click in — or run{" "}
-            <code className="font-mono text-accent">ls</code> and{" "}
-            <code className="font-mono text-accent">open arbflow</code>.
+            A bonus way to explore — click in and run{" "}
+            <code className="font-mono text-accent">ls</code>, or just scroll to
+            the cards below.
           </p>
         </div>
 
