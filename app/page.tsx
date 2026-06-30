@@ -6,7 +6,6 @@ import Notebook from "@/components/Notebook";
 import Section from "@/components/Section";
 import Reveal from "@/components/Reveal";
 import ProjectCard from "@/components/ProjectCard";
-import FeatureCard from "@/components/FeatureCard";
 import { PROJECTS_BY_ID } from "@/lib/projects";
 
 const STACK = [
@@ -65,8 +64,8 @@ export default function Home() {
           <Reveal delay={0.05}>
             <ProjectCard project={PROJECTS_BY_ID["mlops"]} />
           </Reveal>
-          <Reveal className="md:col-span-2">
-            <FeatureCard />
+          <Reveal delay={0.05}>
+            <ProjectCard project={PROJECTS_BY_ID["sleep-apnea"]} />
           </Reveal>
           <Reveal>
             <ProjectCard project={PROJECTS_BY_ID["pre-eclampsia"]} />

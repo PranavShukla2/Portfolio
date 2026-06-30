@@ -45,10 +45,9 @@ export const PROJECTS: ProjectData[] = [
     description:
       "A 1D CNN that detects apnea events from single-lead physiological signals, validated with leave-one-patient-out cross-validation so results hold on unseen patients.",
     chips: ["PyTorch", "1D CNN", "LOPO CV", "SHAP"],
-    badge: { label: "Demo · coming soon", variant: "muted" },
+    badge: { label: "Research · in progress", variant: "muted" },
     callout:
-      "Accuracy is misleading here. With most of the night labelled normal, a model can hit ~91% and still miss the apnea events that matter — that number is inflated by the dominant class, not earned on the hard cases. So I judge it on recall/sensitivity for apnea events (with precision and PR-AUC alongside), and keep ~91% only as the cautionary example that motivated rebuilding the evaluation — the part I'm writing up for publication.",
-    featured: true,
+      "Apnea events are rare, so accuracy is the wrong yardstick — a model can score ~91% by mostly predicting 'normal' and still miss the events that matter. I evaluate it on recall/sensitivity and PR-AUC over the apnea class, where real performance actually shows. Catching that gap and rebuilding the evaluation around it is the core of the paper I'm writing.",
   },
   {
     id: "pre-eclampsia",

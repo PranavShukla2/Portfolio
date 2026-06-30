@@ -35,6 +35,12 @@ export default function ProjectCard({ project }: { project: ProjectData }) {
 
       <p className="text-[15px] leading-relaxed text-ink-2">{project.description}</p>
 
+      {project.callout && (
+        <div className="mt-6 rounded-xl border border-accent/15 bg-accent-wash p-5">
+          <p className="text-[14px] leading-relaxed text-ink">{project.callout}</p>
+        </div>
+      )}
+
       <div className="mt-6 flex flex-wrap gap-2">
         {project.chips.map((chip) => (
           <Chip key={chip}>{chip}</Chip>
