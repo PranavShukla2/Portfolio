@@ -6,6 +6,7 @@ import Notebook from "@/components/Notebook";
 import Section from "@/components/Section";
 import Reveal from "@/components/Reveal";
 import ProjectCard from "@/components/ProjectCard";
+import PulseDot from "@/components/PulseDot";
 import { PROJECTS_BY_ID } from "@/lib/projects";
 
 const STACK = [
@@ -57,17 +58,32 @@ export default function Home() {
 
       {/* ── Selected work ── */}
       <Section id="work" eyebrow="Selected work">
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+        {/* Shipped · in production — the one real production system, front and centre */}
+        <div className="mb-5 flex items-center gap-2.5">
+          <PulseDot />
+          <h3 className="font-mono text-[11px] uppercase tracking-[0.14em] text-ink-2">
+            Shipped · in production
+          </h3>
+        </div>
+        <Reveal>
+          <ProjectCard project={PROJECTS_BY_ID["arbflow"]} />
+        </Reveal>
+
+        {/* Research & projects — built, but not deployed to users */}
+        <div className="mb-5 mt-14 flex items-center gap-2.5">
+          <span className="h-2 w-2 rounded-full bg-ink-3" aria-hidden />
+          <h3 className="font-mono text-[11px] uppercase tracking-[0.14em] text-ink-3">
+            Research &amp; projects
+          </h3>
+        </div>
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           <Reveal>
-            <ProjectCard project={PROJECTS_BY_ID["arbflow"]} />
-          </Reveal>
-          <Reveal delay={0.05}>
             <ProjectCard project={PROJECTS_BY_ID["mlops"]} />
           </Reveal>
           <Reveal delay={0.05}>
             <ProjectCard project={PROJECTS_BY_ID["sleep-apnea"]} />
           </Reveal>
-          <Reveal>
+          <Reveal delay={0.1}>
             <ProjectCard project={PROJECTS_BY_ID["pre-eclampsia"]} />
           </Reveal>
         </div>

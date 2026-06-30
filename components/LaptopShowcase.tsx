@@ -397,7 +397,7 @@ function HomeScreen({
         PranavOS
       </span>
       <h3 className="mt-3 text-[30px] font-semibold tracking-tightest sm:text-[40px]">
-        {PROJECTS.length} things I&apos;ve shipped.
+        {PROJECTS.length} things I&apos;ve built.
       </h3>
 
       <div className="mt-6 flex max-w-lg flex-wrap items-center justify-center gap-2">
