@@ -47,7 +47,7 @@ export const PROJECTS: ProjectData[] = [
     chips: ["PyTorch", "1D CNN", "LOPO CV", "SHAP"],
     badge: { label: "Demo · coming soon", variant: "muted" },
     callout:
-      "Beyond accuracy: under heavy class imbalance, a model can score ~91% and still miss the events that matter. I surfaced this accuracy paradox and built the evaluation around it — the part I'm writing up for publication.",
+      "Accuracy is misleading here. With most of the night labelled normal, a model can hit ~91% and still miss the apnea events that matter — that number is inflated by the dominant class, not earned on the hard cases. So I judge it on recall/sensitivity for apnea events (with precision and PR-AUC alongside), and keep ~91% only as the cautionary example that motivated rebuilding the evaluation — the part I'm writing up for publication.",
     featured: true,
   },
   {

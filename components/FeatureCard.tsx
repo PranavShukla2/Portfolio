@@ -37,10 +37,13 @@ export default function FeatureCard() {
           {/* accuracy-paradox callout */}
           <div className="mt-6 rounded-xl border border-accent/15 bg-accent-wash p-5">
             <p className="text-[14px] leading-relaxed text-ink">
-              Beyond accuracy: under heavy class imbalance, a model can score
-              ~91% and still miss the events that matter. I surfaced this
-              accuracy paradox and built the evaluation around it — the part I&apos;m
-              writing up for publication.
+              Accuracy is misleading here. With most of the night labelled
+              normal, a model can hit ~91% and still miss the apnea events that
+              matter — that number is inflated by the dominant class, not earned
+              on the hard cases. So I judge it on recall/sensitivity for apnea
+              events (with precision and PR-AUC alongside), and keep ~91% only as
+              the cautionary example that motivated rebuilding the evaluation —
+              the part I&apos;m writing up for publication.
             </p>
             {/* TODO confirm the ~91% figure */}
           </div>
