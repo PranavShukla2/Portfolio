@@ -148,8 +148,8 @@ export default function Avatar3D() {
 
           {/* ── right arm (waves) — drawn last so the raised hand is in front of the head ── */}
           <g className="char-wave">
-            <rect x="67" y="92" width="14" height="74" rx="7" fill="url(#shirtGrad)" />
-            <circle cx="74" cy="92" r="9.5" fill="url(#faceShade)" />
+            <rect x="67" y="80" width="14" height="86" rx="7" fill="url(#shirtGrad)" />
+            <circle cx="74" cy="80" r="9.5" fill="url(#faceShade)" />
           </g>
         </g>
       </svg>
