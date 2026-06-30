@@ -4,7 +4,7 @@ const FOOTER_LINKS = [
     href: "https://www.linkedin.com/in/pranav-shukla-softwaredeveloper/",
     label: "LinkedIn",
   },
-  { href: "https://marketing-saas-platform-nb3q.vercel.app/", label: "ArbFlow" },
+  { href: "https://marketing-saas-platform-pi.vercel.app/", label: "ArbFlow" },
 ];
 
 export default function Footer() {

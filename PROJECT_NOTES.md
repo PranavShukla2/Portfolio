@@ -23,7 +23,7 @@ npm run build    # static export-style prerender; must stay green
 ### Real links (already wired)
 - GitHub: https://github.com/PranavShukla2
 - LinkedIn: https://www.linkedin.com/in/pranav-shukla-softwaredeveloper/
-- ArbFlow live demo: https://marketing-saas-platform-nb3q.vercel.app/ (footer + `/work/arbflow`)
+- ArbFlow live demo: https://marketing-saas-platform-pi.vercel.app/ (footer + `/work/arbflow`)
 - Email: pranavmshukla@gmail.com
 
 ---

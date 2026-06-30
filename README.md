@@ -18,7 +18,7 @@ Everything respects `prefers-reduced-motion`, and the whole thing is keyboard-ac
 
 ## Selected work
 
-- **ArbFlow** — multi-tenant GA4 analytics SaaS, live in production. ([demo](https://marketing-saas-platform-nb3q.vercel.app/))
+- **ArbFlow** — multi-tenant GA4 analytics SaaS, live in production. ([demo](https://marketing-saas-platform-pi.vercel.app/))
 - **Self-Healing MLOps Pipeline** — training pipeline that detects failures and recovers itself.
 - **Sleep Apnea Detection** — 1D CNN on single-lead biosignals, validated leave-one-patient-out (paper in progress).
 - **Pre-Eclampsia Risk Model** — flags high-risk pregnancies early from routine clinical data.

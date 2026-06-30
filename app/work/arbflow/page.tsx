@@ -261,7 +261,7 @@ export default function ArbFlowCaseStudy() {
 
       <div className="mt-12 flex flex-wrap items-center gap-3">
         <a
-          href="https://marketing-saas-platform-nb3q.vercel.app/"
+          href="https://marketing-saas-platform-pi.vercel.app/"
           target="_blank"
           rel="noreferrer noopener"
           className="inline-flex items-center gap-2 rounded-full bg-candy px-5 py-3 font-mono text-[13px] text-white shadow-md shadow-accent/20 transition-transform hover:-translate-y-0.5 motion-reduce:hover:translate-y-0"
