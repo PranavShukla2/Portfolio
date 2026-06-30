@@ -1,44 +1,51 @@
-# Pranav — Portfolio
+# Pranav Shukla — Portfolio
 
-A personal developer portfolio. Next.js (App Router) + TypeScript + Tailwind CSS, with Framer Motion for the biosignal motion work.
+This is my personal developer portfolio. I'm a CS undergrad and builder, and I ship across applied ML (healthcare biosignals) and full-stack SaaS. I built this site to show — not just tell — that I can take an ambiguous problem and turn it into something that runs.
 
-A playful "Gradient Candy" palette (coral → pink → purple), an articulated SVG avatar that waves, and an interactive MacBook you browse the work through — type `ls` / `open arbflow` in the in-screen CLI, and "know more" opens a project window inside the laptop.
+**Live:** _add your Vercel URL here_
 
-## Develop
+## What it is
+
+A single-page site with a few interactive bits I had fun building:
+
+- **An articulated avatar of me** — hand-built SVG that bobs, swings its legs, and waves.
+- **An interactive MacBook** — click in to a real terminal, run `ls` / `open arbflow`, and "know more" opens each project in a window inside the laptop. The red/yellow window buttons close and minimise like macOS.
+- **A scroll-driven cricket six** — because I play, and I like a clean straight six the same way I like shipping.
+- **A spiral notebook** with my "field notes" on how I build.
+- **A realistic phone mockup** showing ArbFlow, the analytics SaaS I'm building.
+
+Everything respects `prefers-reduced-motion`, and the whole thing is keyboard-accessible.
+
+## Selected work
+
+- **ArbFlow** — multi-tenant GA4 analytics SaaS, live in production. ([demo](https://marketing-saas-platform-nb3q.vercel.app/))
+- **Self-Healing MLOps Pipeline** — training pipeline that detects failures and recovers itself.
+- **Sleep Apnea Detection** — 1D CNN on single-lead biosignals, validated leave-one-patient-out (paper in progress).
+- **Pre-Eclampsia Risk Model** — flags high-risk pregnancies early from routine clinical data.
+
+## Built with
+
+Next.js (App Router) · TypeScript · Tailwind CSS · Framer Motion. Deployed on Vercel.
+
+## Running it locally
 
 ```bash
 npm install
-npm run dev
+npm run dev      # http://localhost:3000
+npm run build    # production build
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+## Project layout
 
-## Build
+- `app/` — App Router pages (`/` and `/work/arbflow`), root layout, and the design tokens.
+- `components/` — the building blocks: `Avatar3D`, `LaptopShowcase`, `CricketSix`, `Notebook`, `PhoneMockup`, `ProjectCard`, `FeatureCard`, and friends.
+- `lib/projects.ts` — single source of truth for my project data.
+- `tailwind.config.ts` + `app/globals.css` — the palette and tokens. Everything is driven off CSS variables in the `:root` block, so the whole theme can be swapped from one place.
 
-```bash
-npm run build
-npm run start
-```
+## Reach me
 
-## Deploy
+- Email — pranavmshukla@gmail.com
+- GitHub — [@PranavShukla2](https://github.com/PranavShukla2)
+- LinkedIn — [pranav-shukla-softwaredeveloper](https://www.linkedin.com/in/pranav-shukla-softwaredeveloper/)
 
-Zero-config on [Vercel](https://vercel.com/) — import the repo and deploy. No environment variables or external services required.
-
-## Structure
-
-- `app/` — App Router pages (`/` and `/work/arbflow`), root layout, global tokens.
-- `components/` — `Avatar3D`, `LaptopShowcase`, `ScrollProgress`, `ProjectCard`, `FeatureCard`, `Section`, `Nav`, `Footer`, and small primitives.
-- `lib/projects.ts` — single source of project data (shared by the cards and the laptop).
-- `lib/signal.ts` — ECG path generator for the Sleep Apnea demo trace.
-- `tailwind.config.ts` + `app/globals.css` — design tokens / palette (CSS variables surfaced as Tailwind utilities). Swap the palette by editing the `:root` block in `globals.css`.
-
-## Accessibility & motion
-
-- All motion respects `prefers-reduced-motion`: the hero draw, the vitals monitor, and scroll reveals are disabled and final state shows immediately.
-- Semantic landmarks, a skip link, visible keyboard focus rings, and AA-contrast text.
-
-## TODO before launch
-
-- Résumé PDF link (`app/page.tsx`).
-- Confirm the ~91% figure in the sleep-apnea callout (`components/FeatureCard.tsx`).
-- The avatar is hand-built SVG (`components/Avatar3D.tsx`) — tweak hair/skin/shirt colors there if you want it closer to your likeness.
+I'm open to SWE internships with early-stage teams for 2026. If you think I can help you ship, say hi.
