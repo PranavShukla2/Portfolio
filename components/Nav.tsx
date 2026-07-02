@@ -1,4 +1,6 @@
 import Link from "next/link";
+import PulseDot from "./PulseDot";
+import { POSTS } from "@/lib/posts";
 
 const LINKS = [
   { href: "/#work", label: "Work" },
@@ -8,6 +10,8 @@ const LINKS = [
 ];
 
 export default function Nav() {
+  const blogIsLive = POSTS.length > 0;
+
   return (
     <nav
       aria-label="Primary"
@@ -21,18 +25,34 @@ export default function Nav() {
           Pranav<span className="text-accent">.</span>
         </Link>
 
-        <ul className="hidden items-center gap-8 sm:flex">
-          {LINKS.map((link) => (
-            <li key={link.href}>
-              <Link
-                href={link.href}
-                className="font-mono text-[12px] uppercase tracking-[0.1em] text-ink-2 transition-colors hover:text-ink"
-              >
-                {link.label}
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <div className="flex items-center gap-8">
+          <ul className="hidden items-center gap-8 sm:flex">
+            {LINKS.map((link) => (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  className="font-mono text-[12px] uppercase tracking-[0.1em] text-ink-2 transition-colors hover:text-ink"
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+
+          {/* Blog — highlighted, visible on every breakpoint */}
+          <Link
+            href="/blog"
+            className="inline-flex items-center gap-2 rounded-full bg-accent-wash px-3.5 py-1.5 font-mono text-[12px] uppercase tracking-[0.1em] text-accent shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md hover:shadow-accent/20 motion-reduce:hover:translate-y-0"
+          >
+            <PulseDot />
+            Blog
+            {!blogIsLive && (
+              <span className="font-hand text-[13px] normal-case tracking-normal text-accent-2">
+                soon
+              </span>
+            )}
+          </Link>
+        </div>
       </div>
     </nav>
   );

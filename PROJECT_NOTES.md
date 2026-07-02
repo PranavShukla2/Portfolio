@@ -9,7 +9,7 @@ Working log so any future session can pick up with full context. Last updated: 2
 A personal developer portfolio for **Pranav Shukla** (CS undergrad / builder). Audience: YC / early-stage founders reading a cold email. The page's one job: make them think "this person can ship."
 
 - **Stack:** Next.js 15 (App Router) · React 19 · TypeScript · Tailwind CSS v3.4 · Framer Motion 11.
-- **Single main page** at `/`, plus a case-study page at `/work/arbflow`.
+- **Single main page** at `/`, plus a case-study page at `/work/arbflow` and a blog at `/blog` (see §"Blog").
 - **Deploy target:** Vercel (zero-config, fully static — both routes prerender).
 - Mobile-first, responsive, accessible, fully respects `prefers-reduced-motion`.
 
@@ -122,6 +122,45 @@ Realistic phone using a true aspect ratio `aspect-[9/19.3]` (this was the fix �
 
 ### Reveal
 IntersectionObserver-driven (`useInView`, once, amount 0.15). **Fail-safe:** if `IntersectionObserver` is unavailable it shows immediately, so content can never get stuck at opacity:0 (that bug — reveals stuck hidden — was the real cause of an earlier "sections not readable" report). Final state shows immediately under reduced motion.
+
+---
+
+## 4b. Blog (`/blog`)
+
+Added 2026-07-02. Single source of truth is `lib/posts.ts` (`POSTS[]`).
+
+**States (automatic, driven by `POSTS.length`):**
+- **Empty → "coming soon":** `components/blog/ComingSoon.tsx` — floating blobs, pulsing badge, dark terminal card with a JS typewriter cycling draft titles (`DRAFTS[]`), shimmer "progress 67%" bar, CTAs. Typewriter + shimmer are disabled under reduced motion (static first phrase).
+- **≥1 post → index:** newest post renders as a full-width featured `PostCard`, the rest in a 3-col grid. Accent gradients cycle through `POST_ACCENTS` by index.
+
+**Nav:** the Blog link is a highlighted pill (accent wash + PulseDot), visible on *all* breakpoints (the other links stay desktop-only). While `POSTS` is empty it shows a handwritten "soon" suffix, which disappears automatically once a post exists.
+
+**To publish a post:**
+1. Add an entry to `POSTS` in `lib/posts.ts` (slug, title, excerpt, date, readingTime, tags, glyph).
+2. Create `app/blog/<slug>/page.tsx`:
+   ```tsx
+   import PostLayout from "@/components/blog/PostLayout";
+   import { postMetadata } from "@/lib/posts";
+
+   export const metadata = postMetadata("<slug>");
+
+   export default function Post() {
+     return (
+       <PostLayout slug="<slug>">
+         <p>Intro…</p>
+         <h2>Section</h2>
+         <p>Body… <mark>highlight</mark>, <code>inline code</code>.</p>
+         <blockquote>Pull quote.</blockquote>
+         <pre><code>{`code block`}</code></pre>
+       </PostLayout>
+     );
+   }
+   ```
+3. That's it — the index, nav pill, sorting (newest first), and per-post `<head>` metadata all follow from `lib/posts.ts`.
+
+Body typography lives in `globals.css` as `.prose-blog` (h2/h3, links, lists with purple markers, purple-wash inline code, dark `--term-bg` code blocks, accent blockquote border, yellow `mark`). `PostLayout` renders the back link, meta row, candy title, tag pills, prose container, and an email CTA footer; unknown slugs `notFound()`.
+
+Files: `lib/posts.ts` · `app/blog/page.tsx` · `components/blog/{ComingSoon,PostCard,PostLayout}.tsx`.
 
 ---
 
