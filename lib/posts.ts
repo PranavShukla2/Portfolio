@@ -1,5 +1,9 @@
 import type { Metadata } from "next";
 
+/** Production origin — used for canonical URLs so cross-posts (Hashnode etc.)
+ * point search engines back here as the original source. */
+export const SITE_URL = "https://pranavmshukla.in";
+
 export interface PostData {
   /** URL segment — the post page must live at app/blog/<slug>/page.tsx */
   slug: string;
@@ -94,13 +98,16 @@ export function formatPostDate(iso: string): string {
 export function postMetadata(slug: string): Metadata {
   const post = POSTS_BY_SLUG[slug];
   if (!post) return { title: "Blog — Pranav Shukla" };
+  const url = `${SITE_URL}/blog/${slug}`;
   return {
     title: `${post.title} — Pranav Shukla`,
     description: post.excerpt,
+    alternates: { canonical: url },
     openGraph: {
       title: post.title,
       description: post.excerpt,
       type: "article",
+      url,
     },
   };
 }
