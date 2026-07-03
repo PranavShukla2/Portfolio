@@ -160,7 +160,11 @@ Added 2026-07-02. Single source of truth is `lib/posts.ts` (`POSTS[]`).
 
 Body typography lives in `globals.css` as `.prose-blog` (h2/h3, links, lists with purple markers, purple-wash inline code, dark `--term-bg` code blocks, accent blockquote border, yellow `mark`). `PostLayout` renders the back link, meta row, candy title, tag pills, prose container, and an email CTA footer; unknown slugs `notFound()`.
 
-Files: `lib/posts.ts` · `app/blog/page.tsx` · `components/blog/{ComingSoon,PostCard,PostLayout}.tsx`.
+**`AuthFlowDiagram`** (`components/blog/AuthFlowDiagram.tsx`): a dependency-free stand-in for a Mermaid sequence diagram — a vertical numbered flow between actors, with per-hop `highlight: "danger" | "success"` (red/green wash + corner pill). Built from `div`/`span` **only** so `.prose-blog` element rules never touch it (any `p`/`ul`/`li`/`code` inside a post's prose *would* pick up prose styling). Pass `caption` + `steps: FlowStep[]`. Used by the first post to render the before/after OAuth flows.
+
+**First post (published):** `app/blog/jwts-in-redirect-urls/page.tsx` — "Why I Don't Put JWTs in Redirect URLs". Long-form, code-heavy, two `AuthFlowDiagram`s. Note the JSX conventions it uses: code blocks are module-level template-literal consts (backticks and `${` escaped as `` \` `` / `\${`); prose apostrophes/quotes are HTML entities (`&apos;`, `&ldquo;`/`&rdquo;`) to satisfy `react/no-unescaped-entities`, which `next build` treats as an error.
+
+Files: `lib/posts.ts` · `app/blog/page.tsx` · `app/blog/<slug>/page.tsx` · `components/blog/{ComingSoon,PostCard,PostLayout,AuthFlowDiagram}.tsx`.
 
 ---
 
