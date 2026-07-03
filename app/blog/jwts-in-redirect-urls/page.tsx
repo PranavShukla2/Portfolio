@@ -485,10 +485,8 @@ export default function Post() {
 
       <p>
         <em>
-          ArbFlow is a multi-tenant marketing-analytics SaaS for agencies — it
-          unifies clients&apos; GA4 (and soon Meta/LinkedIn) data into
-          white-labeled dashboards, with each client&apos;s credentials
-          encrypted at rest. Built by Pranav Shukla.
+          ArbFlow is the multi-tenant analytics SaaS this decision came from.
+          Built by Pranav Shukla.
         </em>
       </p>
     </PostLayout>
