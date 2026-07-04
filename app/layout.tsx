@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { JetBrains_Mono, Caveat } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import ScrollProgress from "@/components/ScrollProgress";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
@@ -60,6 +61,7 @@ export default function RootLayout({
         <main id="main">{children}</main>
 
         <Footer />
+        <Analytics />
       </body>
     </html>
   );
