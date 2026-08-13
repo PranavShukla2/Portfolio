@@ -1,4 +1,4 @@
-# Pranav Shukla — Portfolio
+# Pranav Shukla — Portfolio !!
 
 This is my personal developer portfolio. I'm a CS undergrad and builder, and I ship across applied ML (healthcare biosignals) and full-stack SaaS. I built this site to show — not just tell — that I can take an ambiguous problem and turn it into something that runs.
 
@@ -48,4 +48,4 @@ npm run build    # production build
 - GitHub — [@PranavShukla2](https://github.com/PranavShukla2)
 - LinkedIn — [pranav-shukla-softwaredeveloper](https://www.linkedin.com/in/pranav-shukla-softwaredeveloper/)
 
-I'm open to SWE internships with early-stage teams for 2026. If you think I can help you ship, say hi.
+I'm open to SWE internships with early-stage teams for 2026. I can think and help you ship, say hi.
