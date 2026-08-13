@@ -7,6 +7,7 @@ import Section from "@/components/Section";
 import Reveal from "@/components/Reveal";
 import ProjectCard from "@/components/ProjectCard";
 import PulseDot from "@/components/PulseDot";
+import Button from "@/components/Button";
 import { PROJECTS_BY_ID } from "@/lib/projects";
 import { SITE_URL } from "@/lib/posts";
 
@@ -245,20 +246,14 @@ export default function Home() {
               think I can help you ship, I&apos;d love to hear from you.
             </p>
             <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
-              <a
-                href="mailto:pranavmshukla@gmail.com"
-                className="inline-flex items-center gap-2 rounded-full bg-candy px-5 py-3 font-mono text-[13px] text-white shadow-md shadow-accent/20 transition-transform hover:-translate-y-0.5 motion-reduce:hover:translate-y-0"
-              >
-                Email me
-              </a>
-              <a
+              <Button href="mailto:pranavmshukla@gmail.com">Email me</Button>
+              <Button
                 href="/resume/Pranav-Shukla-Resume.pdf"
-                target="_blank"
-                rel="noreferrer noopener"
-                className="inline-flex items-center gap-2 rounded-full border border-line-strong bg-surface px-5 py-3 font-mono text-[13px] text-ink transition-colors hover:border-accent hover:text-accent"
+                variant="outline"
+                newTab
               >
                 Résumé (PDF)
-              </a>
+              </Button>
             </div>
           </div>
         </Reveal>

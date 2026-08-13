@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { Eyebrow } from "@/components/Section";
+import Button from "@/components/Button";
 
 export default function NotFound() {
   return (
@@ -36,24 +36,13 @@ export default function NotFound() {
       </p>
 
       <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
-        <Link
-          href="/"
-          className="inline-flex items-center gap-2 rounded-full bg-candy px-5 py-3 font-mono text-[13px] text-white shadow-md shadow-accent/20 transition-transform hover:-translate-y-0.5 motion-reduce:hover:translate-y-0"
-        >
-          Back home →
-        </Link>
-        <Link
-          href="/#work"
-          className="inline-flex items-center gap-2 rounded-full border border-line-strong bg-surface px-5 py-3 font-mono text-[13px] text-ink transition-colors hover:border-accent hover:text-accent"
-        >
+        <Button href="/">Back home →</Button>
+        <Button href="/#work" variant="outline">
           See my work
-        </Link>
-        <Link
-          href="/blog"
-          className="inline-flex items-center gap-2 rounded-full border border-line-strong bg-surface px-5 py-3 font-mono text-[13px] text-ink transition-colors hover:border-accent hover:text-accent"
-        >
+        </Button>
+        <Button href="/blog" variant="outline">
           Read the blog
-        </Link>
+        </Button>
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
-import Link from "next/link";
 import Avatar3D from "./Avatar3D";
 import PulseDot from "./PulseDot";
+import Button from "./Button";
 
 export default function Hero() {
   return (
@@ -26,18 +26,10 @@ export default function Hero() {
             </p>
 
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Link
-                href="#work"
-                className="inline-flex items-center gap-2 rounded-full bg-candy px-5 py-3 font-mono text-[13px] text-white shadow-md shadow-accent/20 transition-transform hover:-translate-y-0.5 motion-reduce:hover:translate-y-0"
-              >
-                See selected work →
-              </Link>
-              <a
-                href="mailto:pranavmshukla@gmail.com"
-                className="inline-flex items-center gap-2 rounded-full border border-line-strong bg-surface px-5 py-3 font-mono text-[13px] text-ink transition-colors hover:border-accent hover:text-accent"
-              >
+              <Button href="#work">See selected work →</Button>
+              <Button href="mailto:pranavmshukla@gmail.com" variant="outline">
                 Get in touch
-              </a>
+              </Button>
             </div>
           </div>
 

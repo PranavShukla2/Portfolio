@@ -1,9 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useReducedMotion } from "framer-motion";
 import Badge from "@/components/Badge";
+import Button from "@/components/Button";
 
 /** Draft titles the terminal "types" while the blog warms up. */
 const DRAFTS = [
@@ -126,18 +126,10 @@ export default function ComingSoon() {
         </div>
 
         <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
-          <Link
-            href="/#work"
-            className="inline-flex items-center gap-2 rounded-full bg-candy px-5 py-3 font-mono text-[13px] text-white shadow-md shadow-accent/20 transition-transform hover:-translate-y-0.5 motion-reduce:hover:translate-y-0"
-          >
-            Meanwhile, see my work →
-          </Link>
-          <a
-            href="mailto:pranavmshukla@gmail.com"
-            className="inline-flex items-center gap-2 rounded-full border border-line-strong bg-surface px-5 py-3 font-mono text-[13px] text-ink transition-colors hover:border-accent hover:text-accent"
-          >
+          <Button href="/#work">Meanwhile, see my work →</Button>
+          <Button href="mailto:pranavmshukla@gmail.com" variant="outline">
             Get notified — say hi
-          </a>
+          </Button>
         </div>
       </div>
     </div>

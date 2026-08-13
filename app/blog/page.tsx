@@ -3,6 +3,7 @@ import { Eyebrow } from "@/components/Section";
 import Reveal from "@/components/Reveal";
 import ComingSoon from "@/components/blog/ComingSoon";
 import PostCard from "@/components/blog/PostCard";
+import Button from "@/components/Button";
 import { SORTED_POSTS } from "@/lib/posts";
 
 export const metadata: Metadata = {
@@ -82,18 +83,12 @@ export default function BlogIndex() {
               Subscribe to catch the next one.
             </p>
             <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-              <a
-                href="/feed.xml"
-                className="inline-flex items-center gap-2 rounded-full border border-line-strong bg-surface px-5 py-2.5 font-mono text-[13px] text-ink transition-colors hover:border-accent hover:text-accent"
-              >
+              <Button href="/feed.xml" variant="outline" newTab>
                 Subscribe via RSS
-              </a>
-              <a
-                href="mailto:pranavmshukla@gmail.com"
-                className="inline-flex items-center gap-2 rounded-full border border-line-strong bg-surface px-5 py-2.5 font-mono text-[13px] text-ink transition-colors hover:border-accent hover:text-accent"
-              >
+              </Button>
+              <Button href="mailto:pranavmshukla@gmail.com" variant="outline">
                 Get notified
-              </a>
+              </Button>
             </div>
           </div>
         </Reveal>

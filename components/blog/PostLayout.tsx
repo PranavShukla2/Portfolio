@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 import { Eyebrow } from "@/components/Section";
+import Button from "@/components/Button";
 import HeadingAnchors from "@/components/blog/HeadingAnchors";
 import {
   POSTS_BY_SLUG,
@@ -181,18 +182,10 @@ export default function PostLayout({
           Thoughts, corrections, or want to talk about this? I read everything.
         </p>
         <div className="mt-6 flex flex-wrap items-center gap-3">
-          <a
-            href="mailto:pranavmshukla@gmail.com"
-            className="inline-flex items-center gap-2 rounded-full bg-candy px-5 py-3 font-mono text-[13px] text-white shadow-md shadow-accent/20 transition-transform hover:-translate-y-0.5 motion-reduce:hover:translate-y-0"
-          >
-            Email me
-          </a>
-          <Link
-            href="/blog"
-            className="inline-flex items-center gap-2 rounded-full border border-line-strong bg-surface px-5 py-3 font-mono text-[13px] text-ink transition-colors hover:border-accent hover:text-accent"
-          >
+          <Button href="mailto:pranavmshukla@gmail.com">Email me</Button>
+          <Button href="/blog" variant="outline">
             More posts
-          </Link>
+          </Button>
         </div>
       </footer>
     </article>
