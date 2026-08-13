@@ -8,9 +8,11 @@ export interface FlowStep {
   tag?: string;
 }
 
-/** Actor → colour, drawn from the Gradient Candy palette. */
+/** Actor → colour, drawn from the Gradient Candy palette. "Browser" is the
+ * neutral actor and uses the theme-aware ink token so it stays legible in
+ * both light and dark. */
 const ACTOR_COLOR: Record<string, string> = {
-  Browser: "#6b5b7b",
+  Browser: "var(--ink-2)",
   Google: "#d98324",
   Backend: "#845ec2",
   Frontend: "#ff4e9b",
@@ -32,7 +34,7 @@ const HL = {
 } as const;
 
 function actorColor(name: string) {
-  return ACTOR_COLOR[name] ?? "#6b5b7b";
+  return ACTOR_COLOR[name] ?? "var(--ink-2)";
 }
 
 /**
