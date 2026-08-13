@@ -29,6 +29,11 @@ export const metadata: Metadata = {
   verification: {
     google: "G5BvkvSemaM5d-q1SGbqymT4mNxJhQMHFN2ZaONv4jk",
   },
+  alternates: {
+    types: {
+      "application/rss+xml": [{ url: "/feed.xml", title: "Pranav Shukla — Blog" }],
+    },
+  },
   openGraph: {
     title: "Pranav — Software Engineer",
     description:
