@@ -23,6 +23,9 @@ export const metadata: Metadata = {
   title: "Pranav Shukla — Applied ML & Full-stack Engineer",
   description:
     "CS undergrad and builder shipping across applied ML (healthcare biosignals) and full-stack SaaS. Open to SWE internships, 2026.",
+  verification: {
+    google: "G5BvkvSemaM5d-q1SGbqymT4mNxJhQMHFN2ZaONv4jk",
+  },
   openGraph: {
     title: "Pranav — Software Engineer",
     description:
