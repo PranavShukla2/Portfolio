@@ -24,7 +24,7 @@ export default function Notebook() {
         aria-hidden
       />
 
-      <div className="relative overflow-hidden rounded-2xl border border-line bg-white px-9 pb-9 pt-10 shadow-[0_34px_70px_-28px_rgba(132,94,194,0.5)]">
+      <div className="relative overflow-hidden rounded-2xl border border-line bg-surface px-9 pb-9 pt-10 shadow-[0_34px_70px_-28px_rgba(132,94,194,0.5)]">
         {/* ruled lines */}
         <div
           className="pointer-events-none absolute inset-x-0 bottom-0 top-10"
@@ -43,7 +43,9 @@ export default function Notebook() {
           <ul className="mt-5 space-y-[11px] text-[23px] leading-snug">
             <li>
               1. find what actually{" "}
-              <mark className="rounded bg-accent-3/55 px-1 text-ink">matters</mark>
+              <mark className="rounded bg-accent-3/60 px-1" style={{ color: "#241733" }}>
+                matters
+              </mark>
             </li>
             <li>2. ship the smallest thing that actually works</li>
             <li>3. put it in front of real users, fast</li>
