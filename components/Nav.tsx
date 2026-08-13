@@ -1,5 +1,6 @@
 import Link from "next/link";
 import PulseDot from "./PulseDot";
+import MobileMenu from "./MobileMenu";
 import { POSTS } from "@/lib/posts";
 
 const LINKS = [
@@ -25,7 +26,7 @@ export default function Nav() {
           Pranav<span className="text-accent">.</span>
         </Link>
 
-        <div className="flex items-center gap-8">
+        <div className="flex items-center gap-4 sm:gap-8">
           <ul className="hidden items-center gap-8 sm:flex">
             {LINKS.map((link) => (
               <li key={link.href}>
@@ -52,6 +53,9 @@ export default function Nav() {
               </span>
             )}
           </Link>
+
+          {/* Primary links as a hamburger on phones */}
+          <MobileMenu links={LINKS} />
         </div>
       </div>
     </nav>
