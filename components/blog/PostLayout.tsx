@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 import { Eyebrow } from "@/components/Section";
+import HeadingAnchors from "@/components/blog/HeadingAnchors";
 import {
   POSTS_BY_SLUG,
   POST_ACCENTS,
@@ -124,6 +125,7 @@ export default function PostLayout({
       </header>
 
       <div className="prose-blog mt-12">{children}</div>
+      <HeadingAnchors />
 
       {/* prev / next posts */}
       {(newer || older) && (

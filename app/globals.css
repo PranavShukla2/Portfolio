@@ -102,6 +102,8 @@
     margin-top: 1.25em;
   }
   .prose-blog h2 {
+    position: relative;
+    scroll-margin-top: 90px;
     margin-top: 2.2em;
     font-size: 26px;
     font-weight: 600;
@@ -110,11 +112,25 @@
     color: var(--ink);
   }
   .prose-blog h3 {
+    position: relative;
+    scroll-margin-top: 90px;
     margin-top: 1.8em;
     font-size: 20px;
     font-weight: 600;
     letter-spacing: -0.02em;
     color: var(--ink);
+  }
+  .prose-blog .heading-anchor {
+    margin-left: 0.35em;
+    color: var(--accent);
+    text-decoration: none;
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+  .prose-blog h2:hover .heading-anchor,
+  .prose-blog h3:hover .heading-anchor,
+  .prose-blog .heading-anchor:focus-visible {
+    opacity: 0.75;
   }
   .prose-blog strong {
     font-weight: 600;
