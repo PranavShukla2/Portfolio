@@ -38,6 +38,13 @@ export default function PostLayout({
   const index = SORTED_POSTS.findIndex((p) => p.slug === slug);
   const accent = POST_ACCENTS[Math.max(index, 0) % POST_ACCENTS.length];
 
+  // SORTED_POSTS is newest-first: index-1 is newer, index+1 is older.
+  const newer = index > 0 ? SORTED_POSTS[index - 1] : undefined;
+  const older =
+    index >= 0 && index < SORTED_POSTS.length - 1
+      ? SORTED_POSTS[index + 1]
+      : undefined;
+
   return (
     <article className="relative mx-auto w-full max-w-page px-6 py-16 sm:px-8 sm:py-24">
       {/* vibrant header backdrop */}
@@ -97,7 +104,44 @@ export default function PostLayout({
 
       <div className="prose-blog mt-12">{children}</div>
 
-      <footer className="mt-16 border-t border-line pt-10">
+      {/* prev / next posts */}
+      {(newer || older) && (
+        <nav
+          aria-label="More posts"
+          className="mt-16 grid gap-4 border-t border-line pt-10 sm:grid-cols-2"
+        >
+          {older ? (
+            <Link
+              href={`/blog/${older.slug}`}
+              className="group rounded-2xl border border-line bg-surface p-5 transition-all hover:-translate-y-0.5 hover:shadow-[0_18px_50px_-24px_rgba(132,94,194,0.35)] motion-reduce:hover:translate-y-0"
+            >
+              <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-3">
+                ← Older
+              </span>
+              <span className="mt-2 block font-semibold leading-snug text-ink transition-colors group-hover:text-accent">
+                {older.title}
+              </span>
+            </Link>
+          ) : (
+            <span aria-hidden />
+          )}
+          {newer && (
+            <Link
+              href={`/blog/${newer.slug}`}
+              className="group rounded-2xl border border-line bg-surface p-5 text-right transition-all hover:-translate-y-0.5 hover:shadow-[0_18px_50px_-24px_rgba(132,94,194,0.35)] motion-reduce:hover:translate-y-0"
+            >
+              <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-3">
+                Newer →
+              </span>
+              <span className="mt-2 block font-semibold leading-snug text-ink transition-colors group-hover:text-accent">
+                {newer.title}
+              </span>
+            </Link>
+          )}
+        </nav>
+      )}
+
+      <footer className="mt-12 border-t border-line pt-10">
         <p className="text-[16px] leading-relaxed text-ink-2">
           Thoughts, corrections, or want to talk about this? I read everything.
         </p>
