@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 
 interface NavLink {
   href: string;
@@ -10,11 +11,12 @@ interface NavLink {
 
 /**
  * Hamburger disclosure for the primary links on phones (they're hidden on
- * `sm+` where the inline list shows). Keeps the Blog pill and brand always
- * visible in Nav; this only handles Work/About/Stack/Contact on small screens.
+ * `sm+` where the inline list shows). Keeps the Blog pill, theme toggle, and
+ * brand always visible in Nav; this only handles the section links on mobile.
  */
 export default function MobileMenu({ links }: { links: NavLink[] }) {
   const [open, setOpen] = useState(false);
+  const reduce = useReducedMotion();
 
   // Close on Escape, and lock body scroll while the panel is open.
   useEffect(() => {
@@ -56,34 +58,46 @@ export default function MobileMenu({ links }: { links: NavLink[] }) {
         </svg>
       </button>
 
-      {open && (
-        <>
-          {/* backdrop */}
-          <button
-            type="button"
-            aria-hidden
-            tabIndex={-1}
-            onClick={() => setOpen(false)}
-            className="fixed inset-0 top-14 z-40 bg-black/30 backdrop-blur-sm"
-          />
-          {/* panel — opaque surface (custom var() colors can't take an alpha modifier) */}
-          <div className="fixed inset-x-0 top-14 z-50 border-b border-line bg-surface shadow-xl">
-            <ul className="mx-auto flex max-w-page flex-col gap-1 px-6 py-4">
-              {links.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    onClick={() => setOpen(false)}
-                    className="block rounded-lg px-3 py-3 font-mono text-[13px] uppercase tracking-[0.1em] text-ink-2 transition-colors hover:bg-accent-wash hover:text-accent"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </>
-      )}
+      <AnimatePresence>
+        {open && (
+          <>
+            {/* backdrop */}
+            <motion.button
+              type="button"
+              aria-hidden
+              tabIndex={-1}
+              onClick={() => setOpen(false)}
+              className="fixed inset-0 top-14 z-40 bg-black/30 backdrop-blur-sm"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.18 }}
+            />
+            {/* panel — opaque surface (custom var() colors can't take an alpha modifier) */}
+            <motion.div
+              className="fixed inset-x-0 top-14 z-50 border-b border-line bg-surface shadow-xl"
+              initial={reduce ? { opacity: 0 } : { opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={reduce ? { opacity: 0 } : { opacity: 0, y: -10 }}
+              transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <ul className="mx-auto flex max-w-page flex-col gap-1 px-6 py-4">
+                {links.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      onClick={() => setOpen(false)}
+                      className="block rounded-lg px-3 py-3 font-mono text-[13px] uppercase tracking-[0.1em] text-ink-2 transition-colors hover:bg-accent-wash hover:text-accent"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
