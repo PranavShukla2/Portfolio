@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # `next build` type-checks (tsc) and prerenders every route — this is the
+      # gate. (`next lint` is intentionally omitted: no ESLint config is set up,
+      # so it prompts interactively and would hang in CI.)
+      - name: Build
+        run: npm run build
