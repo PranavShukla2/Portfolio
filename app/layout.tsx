@@ -4,6 +4,7 @@ import { Analytics } from "@vercel/analytics/next";
 import ScrollProgress from "@/components/ScrollProgress";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
+import { SITE_URL } from "@/lib/posts";
 import "./globals.css";
 
 const jetbrainsMono = JetBrains_Mono({
@@ -21,6 +22,7 @@ const caveat = Caveat({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: "Pranav Shukla — Applied ML & Full-stack Engineer",
   description:
     "CS undergrad and builder shipping across applied ML (healthcare biosignals) and full-stack SaaS. Open to SWE internships, 2026.",
