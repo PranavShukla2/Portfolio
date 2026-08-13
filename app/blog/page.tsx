@@ -60,7 +60,7 @@ export default function BlogIndex() {
         </Reveal>
       </div>
 
-      {rest.length > 0 && (
+      {rest.length > 0 ? (
         <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {rest.map((post, i) => (
             <Reveal key={post.slug} delay={(i % 3) * 0.05}>
@@ -68,6 +68,35 @@ export default function BlogIndex() {
             </Reveal>
           ))}
         </div>
+      ) : (
+        <Reveal delay={0.05}>
+          <div className="mt-6 rounded-2xl border border-dashed border-line-strong bg-surface/50 px-8 py-12 text-center">
+            <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-ink-3">
+              More on the way
+            </p>
+            <h3 className="mt-3 text-[20px] font-semibold tracking-tightest text-ink">
+              More posts are in the works.
+            </h3>
+            <p className="mx-auto mt-2 max-w-md text-[15px] leading-relaxed text-ink-2">
+              I write these up when I&apos;ve built something worth explaining.
+              Subscribe to catch the next one.
+            </p>
+            <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+              <a
+                href="/feed.xml"
+                className="inline-flex items-center gap-2 rounded-full border border-line-strong bg-surface px-5 py-2.5 font-mono text-[13px] text-ink transition-colors hover:border-accent hover:text-accent"
+              >
+                Subscribe via RSS
+              </a>
+              <a
+                href="mailto:pranavmshukla@gmail.com"
+                className="inline-flex items-center gap-2 rounded-full border border-line-strong bg-surface px-5 py-2.5 font-mono text-[13px] text-ink transition-colors hover:border-accent hover:text-accent"
+              >
+                Get notified
+              </a>
+            </div>
+          </div>
+        </Reveal>
       )}
     </div>
   );
