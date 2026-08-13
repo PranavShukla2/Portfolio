@@ -8,6 +8,30 @@ import Reveal from "@/components/Reveal";
 import ProjectCard from "@/components/ProjectCard";
 import PulseDot from "@/components/PulseDot";
 import { PROJECTS_BY_ID } from "@/lib/projects";
+import { SITE_URL } from "@/lib/posts";
+
+const PROFILES = [
+  "https://github.com/PranavShukla2",
+  "https://www.linkedin.com/in/pranav-shukla-softwaredeveloper/",
+];
+
+const JSON_LD = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      name: "Pranav Shukla",
+      url: SITE_URL,
+      jobTitle: "Applied ML & Full-stack Engineer",
+      sameAs: PROFILES,
+    },
+    {
+      "@type": "WebSite",
+      name: "Pranav Shukla",
+      url: SITE_URL,
+    },
+  ],
+};
 
 const STACK = [
   {
@@ -52,6 +76,10 @@ const FACTS = [
 export default function Home() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }}
+      />
       <Hero />
 
       {/* ── Interactive laptop showcase ── */}

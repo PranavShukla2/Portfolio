@@ -6,6 +6,7 @@ import {
   POSTS_BY_SLUG,
   POST_ACCENTS,
   SORTED_POSTS,
+  SITE_URL,
   formatPostDate,
 } from "@/lib/posts";
 
@@ -45,8 +46,28 @@ export default function PostLayout({
       ? SORTED_POSTS[index + 1]
       : undefined;
 
+  const url = `${SITE_URL}/blog/${slug}`;
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.excerpt,
+    datePublished: post.date,
+    dateModified: post.date,
+    keywords: post.tags.join(", "),
+    image: `${url}/opengraph-image`,
+    url,
+    mainEntityOfPage: { "@type": "WebPage", "@id": url },
+    author: { "@type": "Person", name: "Pranav Shukla", url: SITE_URL },
+    publisher: { "@type": "Person", name: "Pranav Shukla", url: SITE_URL },
+  };
+
   return (
     <article className="relative mx-auto w-full max-w-page px-6 py-16 sm:px-8 sm:py-24">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* vibrant header backdrop */}
       <div
         aria-hidden
