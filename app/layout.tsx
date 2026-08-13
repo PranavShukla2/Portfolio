@@ -43,10 +43,16 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#fbfbfd",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#fff6f6" },
+    { media: "(prefers-color-scheme: dark)", color: "#141019" },
+  ],
   width: "device-width",
   initialScale: 1,
 };
+
+// Applies a stored theme before first paint so there's no light→dark flash.
+const NO_FLASH = `(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light'){document.documentElement.setAttribute('data-theme',t);}}catch(e){}})();`;
 
 export default function RootLayout({
   children,
@@ -54,8 +60,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${jetbrainsMono.variable} ${caveat.variable}`}>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${jetbrainsMono.variable} ${caveat.variable}`}
+    >
       <body>
+        <script dangerouslySetInnerHTML={{ __html: NO_FLASH }} />
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-lg focus:border focus:border-line focus:bg-surface focus:px-4 focus:py-2 focus:font-mono focus:text-[13px] focus:text-ink"

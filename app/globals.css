@@ -4,6 +4,8 @@
 
 /* ─── Design tokens — "Gradient Candy" ──────────────────────────── */
 :root {
+  color-scheme: light;
+
   --bg: #fff6f6;
   --surface: #ffffff;
   --line: rgba(132, 94, 194, 0.14);
@@ -33,6 +35,57 @@
 
   /* terminal */
   --term-bg: #17121f;
+  --term-line: #2e2440;
+}
+
+/* ─── Dark palette ──────────────────────────────────────────────────
+   Applied when the OS prefers dark (unless the user forced light), and
+   whenever the toggle sets data-theme="dark". Tokens only — every surface
+   reads through the Tailwind utilities, so this recolors the whole site. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #141019;
+    --surface: #1d1730;
+    --line: rgba(154, 120, 214, 0.16);
+    --line-strong: rgba(154, 120, 214, 0.3);
+    --ink: #f3edfb;
+    --ink-2: #bcaad3;
+    --ink-3: #8b7ba6;
+    --accent: #ff6bab;
+    --accent-bright: #ff8080;
+    --accent-wash: rgba(255, 107, 171, 0.16);
+    --accent-2: #a982e6;
+    --accent-2-bright: #bd9bf0;
+    --accent-2-wash: rgba(154, 120, 214, 0.2);
+    --accent-3: #ffc266;
+    --accent-3-wash: rgba(255, 179, 71, 0.18);
+    --coral: #ff8080;
+    --candy: linear-gradient(135deg, #ff7a7a, #ff5ea3, #9a78d6);
+    --term-bg: #0f0b17;
+    --term-line: #2e2440;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #141019;
+  --surface: #1d1730;
+  --line: rgba(154, 120, 214, 0.16);
+  --line-strong: rgba(154, 120, 214, 0.3);
+  --ink: #f3edfb;
+  --ink-2: #bcaad3;
+  --ink-3: #8b7ba6;
+  --accent: #ff6bab;
+  --accent-bright: #ff8080;
+  --accent-wash: rgba(255, 107, 171, 0.16);
+  --accent-2: #a982e6;
+  --accent-2-bright: #bd9bf0;
+  --accent-2-wash: rgba(154, 120, 214, 0.2);
+  --accent-3: #ffc266;
+  --accent-3-wash: rgba(255, 179, 71, 0.18);
+  --coral: #ff8080;
+  --candy: linear-gradient(135deg, #ff7a7a, #ff5ea3, #9a78d6);
+  --term-bg: #0f0b17;
   --term-line: #2e2440;
 }
 

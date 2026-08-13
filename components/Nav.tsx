@@ -1,6 +1,7 @@
 import Link from "next/link";
 import PulseDot from "./PulseDot";
 import MobileMenu from "./MobileMenu";
+import ThemeToggle from "./ThemeToggle";
 import { POSTS } from "@/lib/posts";
 
 const LINKS = [
@@ -53,6 +54,8 @@ export default function Nav() {
               </span>
             )}
           </Link>
+
+          <ThemeToggle />
 
           {/* Primary links as a hamburger on phones */}
           <MobileMenu links={LINKS} />
