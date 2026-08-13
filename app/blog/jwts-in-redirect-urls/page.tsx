@@ -1,5 +1,6 @@
 import PostLayout from "@/components/blog/PostLayout";
 import AuthFlowDiagram, { type FlowStep } from "@/components/blog/AuthFlowDiagram";
+import CodeBlock from "@/components/blog/CodeBlock";
 import { postMetadata } from "@/lib/posts";
 
 export const metadata = postMetadata("jwts-in-redirect-urls");
@@ -205,9 +206,7 @@ export default function Post() {
         ArbFlow&apos;s shape, the &ldquo;don&apos;t do this&rdquo; version looks
         like this:
       </p>
-      <pre>
-        <code>{DONT_PY}</code>
-      </pre>
+      <CodeBlock lang="python" code={DONT_PY} />
       <p>
         The frontend reads <code>token</code> from the URL, drops it in storage,
         done. It works the first time you test it. No error, no friction. And
@@ -311,17 +310,13 @@ export default function Post() {
         mint the JWT but redirect with an <code>auth_code</code> instead of the
         token (<code>backend/app/api/integrations.py</code>):
       </p>
-      <pre>
-        <code>{CALLBACK_PY}</code>
-      </pre>
+      <CodeBlock lang="python" code={CALLBACK_PY} />
       <p>
         <code>create_auth_code</code> is where &ldquo;hashed at rest&rdquo;
         happens — only the sha256 of the code is ever written to the database (
         <code>backend/app/core/oauth.py</code>):
       </p>
-      <pre>
-        <code>{CREATE_PY}</code>
-      </pre>
+      <CodeBlock lang="python" code={CREATE_PY} />
       <p>
         The exchange endpoint trades a valid code for the token. There&apos;s
         nothing to brute-force here in the first place — the code is 256 bits of
@@ -329,17 +324,13 @@ export default function Post() {
         you get — but the endpoint is rate-limited anyway, as plain
         defense-in-depth against abuse (<code>backend/app/api/auth.py</code>):
       </p>
-      <pre>
-        <code>{EXCHANGE_PY}</code>
-      </pre>
+      <CodeBlock lang="python" code={EXCHANGE_PY} />
       <p>
         The single-use guarantee lives in <code>consume_auth_code</code> — and
         this is the part I got subtly wrong the first time, so it&apos;s worth
         slowing down on (<code>backend/app/core/oauth.py</code>):
       </p>
-      <pre>
-        <code>{CONSUME_PY}</code>
-      </pre>
+      <CodeBlock lang="python" code={CONSUME_PY} />
       <p>
         My first version did the obvious thing: <code>SELECT</code> the row by
         code hash, check it, then <code>DELETE</code> it — two statements. That
@@ -376,9 +367,7 @@ export default function Post() {
         token, and scrubs the code from the address bar (
         <code>frontend/src/lib/auth.ts</code>):
       </p>
-      <pre>
-        <code>{FRONTEND_TS}</code>
-      </pre>
+      <CodeBlock lang="ts" code={FRONTEND_TS} />
       <p>
         That last dedupe is a small real-world wrinkle worth calling out: because
         the code is genuinely single-use, React Strict Mode invoking the effect

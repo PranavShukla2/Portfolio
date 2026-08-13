@@ -169,6 +169,17 @@
     font-size: inherit;
     color: #f2ecff;
   }
+  /* Shiki keeps its own token colors but wears our brand dark frame. */
+  .prose-blog pre.shiki {
+    background: var(--term-bg) !important;
+  }
+  .prose-blog pre.shiki code {
+    color: inherit;
+  }
+  .prose-blog pre.shiki .line {
+    display: inline-block;
+    width: 100%;
+  }
   .prose-blog blockquote {
     border-left: 3px solid var(--accent);
     padding-left: 1.2em;
