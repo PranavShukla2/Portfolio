@@ -26,7 +26,7 @@ export default function PostCard({ post, index, featured = false }: PostCardProp
       <div className={featured ? "p-7 sm:p-9" : "p-6"}>
         <div className="flex items-center gap-3">
           <span
-            className={`flex shrink-0 items-center justify-center rounded-xl text-white shadow-sm ${
+            className={`flex shrink-0 items-center justify-center rounded-xl text-white shadow-sm transition-transform duration-300 group-hover:scale-105 group-hover:-rotate-3 motion-reduce:transform-none ${
               featured ? "h-12 w-12 text-[22px]" : "h-10 w-10 text-[18px]"
             }`}
             style={{ background: accent.grad }}
@@ -69,8 +69,14 @@ export default function PostCard({ post, index, featured = false }: PostCardProp
               {tag}
             </span>
           ))}
-          <span className="ml-auto font-mono text-[12px] text-ink-3 transition-colors group-hover:text-accent">
-            Read →
+          <span className="ml-auto inline-flex items-center gap-1 font-mono text-[12px] text-ink-3 transition-colors group-hover:text-accent">
+            Read
+            <span
+              aria-hidden
+              className="transition-transform duration-200 group-hover:translate-x-1 motion-reduce:transform-none"
+            >
+              →
+            </span>
           </span>
         </div>
       </div>

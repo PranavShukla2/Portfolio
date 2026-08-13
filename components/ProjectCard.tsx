@@ -15,7 +15,7 @@ export default function ProjectCard({ project }: { project: ProjectData }) {
       <div className="mb-5 flex items-start justify-between gap-4">
         <div className="flex items-center gap-3">
           <span
-            className="bg-candy flex h-11 w-11 items-center justify-center rounded-xl text-[20px] shadow-sm"
+            className="bg-candy flex h-11 w-11 items-center justify-center rounded-xl text-[20px] shadow-sm transition-transform duration-300 group-hover:scale-105 group-hover:-rotate-3 motion-reduce:transform-none"
             aria-hidden
           >
             {project.glyph}
@@ -55,9 +55,15 @@ export default function ProjectCard({ project }: { project: ProjectData }) {
         <div className="mt-auto pt-6">
           <Link
             href={project.link.href}
-            className="inline-flex items-center gap-1 font-mono text-[13px] font-medium text-accent transition-colors hover:text-accent-bright"
+            className="inline-flex items-center gap-1.5 font-mono text-[13px] font-medium text-accent transition-colors hover:text-accent-bright"
           >
-            {project.link.label}
+            {project.link.label.replace(/\s*→\s*$/, "")}
+            <span
+              aria-hidden
+              className="transition-transform duration-200 group-hover:translate-x-1 motion-reduce:transform-none"
+            >
+              →
+            </span>
           </Link>
         </div>
       )}

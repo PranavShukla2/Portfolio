@@ -138,8 +138,14 @@ export default function PostLayout({
               href={`/blog/${older.slug}`}
               className="group rounded-2xl border border-line bg-surface p-5 transition-all hover:-translate-y-0.5 hover:shadow-[0_18px_50px_-24px_rgba(132,94,194,0.35)] motion-reduce:hover:translate-y-0"
             >
-              <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-3">
-                ← Older
+              <span className="inline-flex items-center gap-1 font-mono text-[11px] uppercase tracking-[0.12em] text-ink-3">
+                <span
+                  aria-hidden
+                  className="transition-transform duration-200 group-hover:-translate-x-1 motion-reduce:transform-none"
+                >
+                  ←
+                </span>
+                Older
               </span>
               <span className="mt-2 block font-semibold leading-snug text-ink transition-colors group-hover:text-accent">
                 {older.title}
@@ -153,8 +159,14 @@ export default function PostLayout({
               href={`/blog/${newer.slug}`}
               className="group rounded-2xl border border-line bg-surface p-5 text-right transition-all hover:-translate-y-0.5 hover:shadow-[0_18px_50px_-24px_rgba(132,94,194,0.35)] motion-reduce:hover:translate-y-0"
             >
-              <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-3">
-                Newer →
+              <span className="inline-flex items-center gap-1 font-mono text-[11px] uppercase tracking-[0.12em] text-ink-3">
+                Newer
+                <span
+                  aria-hidden
+                  className="transition-transform duration-200 group-hover:translate-x-1 motion-reduce:transform-none"
+                >
+                  →
+                </span>
               </span>
               <span className="mt-2 block font-semibold leading-snug text-ink transition-colors group-hover:text-accent">
                 {newer.title}
