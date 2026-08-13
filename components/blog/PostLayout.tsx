@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import { Eyebrow } from "@/components/Section";
 import Button from "@/components/Button";
 import HeadingAnchors from "@/components/blog/HeadingAnchors";
+import TableOfContents from "@/components/blog/TableOfContents";
 import {
   POSTS_BY_SLUG,
   POST_ACCENTS,
@@ -125,7 +126,10 @@ export default function PostLayout({
         </div>
       </header>
 
-      <div className="prose-blog mt-12">{children}</div>
+      <div className="mt-12 lg:grid lg:grid-cols-[minmax(0,1fr)_14rem] lg:gap-10">
+        <div className="prose-blog">{children}</div>
+        <TableOfContents />
+      </div>
       <HeadingAnchors />
 
       {/* prev / next posts */}
