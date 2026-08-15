@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import Link from "next/link";
+import { Link } from "next-view-transitions";
 import { PROJECTS, PROJECTS_BY_ID } from "@/lib/projects";
 import Badge from "./Badge";
 import Chip from "./Chip";
