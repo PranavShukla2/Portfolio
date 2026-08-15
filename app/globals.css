@@ -442,14 +442,22 @@
   }
 }
 
-/* ─── View transitions (shared-element post-title morph) ─────────── */
+/* ─── View transitions (shared-element title morph) ─────────────────
+   Gentle: a slow, evenly-eased grow (no fast "pop"), and the morphing
+   title crossfades quickly so the scale change reads soft, not as a
+   zoom lunging toward the viewer. */
 ::view-transition-group(*) {
-  animation-duration: 0.35s;
-  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  animation-duration: 0.5s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+::view-transition-old(*),
+::view-transition-new(*) {
+  animation-duration: 0.22s;
+  animation-timing-function: ease;
 }
 ::view-transition-old(root),
 ::view-transition-new(root) {
-  animation-duration: 0.28s;
+  animation-duration: 0.3s;
 }
 
 @media (prefers-reduced-motion: reduce) {
