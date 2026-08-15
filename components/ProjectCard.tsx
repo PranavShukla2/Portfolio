@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "next-view-transitions";
 import type { ProjectData } from "@/lib/projects";
 import Badge from "./Badge";
 import Chip from "./Chip";
@@ -20,7 +20,10 @@ export default function ProjectCard({ project }: { project: ProjectData }) {
           >
             {project.glyph}
           </span>
-          <h3 className="text-xl font-semibold tracking-tightest text-ink">
+          <h3
+            style={{ viewTransitionName: `project-title-${project.id}` }}
+            className="text-xl font-semibold tracking-tightest text-ink"
+          >
             {project.title}
           </h3>
         </div>
