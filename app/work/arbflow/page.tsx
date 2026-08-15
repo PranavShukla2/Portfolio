@@ -144,7 +144,10 @@ export default function ArbFlowCaseStudy() {
           <Badge label="Live" variant="live" pulse />
         </div>
 
-        <h1 className="mt-5 text-[44px] font-semibold leading-[1.02] tracking-tightest sm:text-[60px]">
+        <h1
+          style={{ viewTransitionName: "project-title-arbflow" }}
+          className="mt-5 text-[44px] font-semibold leading-[1.02] tracking-tightest sm:text-[60px]"
+        >
           <span className="text-candy">ArbFlow</span>
         </h1>
 
