@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { Link } from "next-view-transitions";
 import { Eyebrow } from "@/components/Section";
 import Badge from "@/components/Badge";
 import Button from "@/components/Button";
