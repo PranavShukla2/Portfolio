@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "next-view-transitions";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 import { Eyebrow } from "@/components/Section";
@@ -109,7 +109,10 @@ export default function PostLayout({
           </p>
         </div>
 
-        <h1 className="mt-5 max-w-3xl text-[36px] font-semibold leading-[1.08] tracking-tightest sm:text-[48px]">
+        <h1
+          style={{ viewTransitionName: `post-title-${slug}` }}
+          className="mt-5 max-w-3xl text-[36px] font-semibold leading-[1.08] tracking-tightest sm:text-[48px]"
+        >
           <span className="text-candy">{post.title}</span>
         </h1>
 
@@ -152,7 +155,10 @@ export default function PostLayout({
                 </span>
                 Older
               </span>
-              <span className="mt-2 block font-semibold leading-snug text-ink transition-colors group-hover:text-accent">
+              <span
+                style={{ viewTransitionName: `post-title-${older.slug}` }}
+                className="mt-2 block font-semibold leading-snug text-ink transition-colors group-hover:text-accent"
+              >
                 {older.title}
               </span>
             </Link>
@@ -173,7 +179,10 @@ export default function PostLayout({
                   →
                 </span>
               </span>
-              <span className="mt-2 block font-semibold leading-snug text-ink transition-colors group-hover:text-accent">
+              <span
+                style={{ viewTransitionName: `post-title-${newer.slug}` }}
+                className="mt-2 block font-semibold leading-snug text-ink transition-colors group-hover:text-accent"
+              >
                 {newer.title}
               </span>
             </Link>

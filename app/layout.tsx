@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { JetBrains_Mono, Caveat } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
+import { ViewTransitions } from "next-view-transitions";
 import ScrollProgress from "@/components/ScrollProgress";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
@@ -60,11 +61,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html
-      lang="en"
-      suppressHydrationWarning
-      className={`${jetbrainsMono.variable} ${caveat.variable}`}
-    >
+    <ViewTransitions>
+      <html
+        lang="en"
+        suppressHydrationWarning
+        className={`${jetbrainsMono.variable} ${caveat.variable}`}
+      >
       <body>
         <script dangerouslySetInnerHTML={{ __html: NO_FLASH }} />
         <a
@@ -84,6 +86,7 @@ export default function RootLayout({
         <Footer />
         <Analytics />
       </body>
-    </html>
+      </html>
+    </ViewTransitions>
   );
 }

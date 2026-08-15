@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "next-view-transitions";
 import {
   POST_ACCENTS,
   formatPostDate,
@@ -44,6 +44,7 @@ export default function PostCard({ post, index, featured = false }: PostCardProp
         </div>
 
         <h2
+          style={{ viewTransitionName: `post-title-${post.slug}` }}
           className={`mt-4 font-semibold tracking-tightest text-ink transition-colors group-hover:text-accent ${
             featured ? "text-[26px] leading-snug sm:text-[32px]" : "text-[19px] leading-snug"
           }`}
