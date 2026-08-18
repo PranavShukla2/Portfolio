@@ -62,6 +62,12 @@ const IMPACTS = [
   { t: 0.94, s: 0.04 },
 ];
 
+// The chip is drawn at desktop size and scaled about its tail, which sits on
+// the resting ball. Narrow screens scale it up towards CHIP_TARGET_PX.
+const CHIP_ANCHOR = { x: 536, y: 196 };
+const CHIP_FONT = 13;
+const CHIP_TARGET_PX = 15;
+
 const getSquash = (t: number) => {
   let squash = 0;
   for (const i of IMPACTS) {
@@ -87,11 +93,16 @@ export default function CricketSix() {
   const dustRef = useRef<SVGGElement>(null);
   const trajectoryPathRef = useRef<SVGPathElement>(null);
   const sixRef = useRef<SVGGElement>(null);
+  const svgRef = useRef<SVGSVGElement>(null);
   const ctaRef = useRef<SVGGElement>(null);
   const ctaLinkRef = useRef<HTMLAnchorElement>(null);
 
   const rafRef = useRef<number | null>(null);
   const pRef = useRef(0);
+  // how far the chip is popped (0..1), and how much to blow it up so it stays
+  // readable and tappable when the whole scene renders small
+  const ctaShownRef = useRef(0);
+  const chipScaleRef = useRef(1);
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -336,14 +347,16 @@ export default function CricketSix() {
 
   // The chip only takes clicks (and tab focus) once it is actually on screen.
   const setCta = (shown: number) => {
+    ctaShownRef.current = shown;
     if (ctaRef.current) {
-      const s = lerp(0.85, 1, shown);
+      const s = lerp(0.85, 1, shown) * chipScaleRef.current;
       const rise = lerp(10, 0, shown);
+      // scaled about the tail tip so the chip always stays pinned to the ball
       ctaRef.current.setAttribute(
         "transform",
-        `translate(0 ${rise.toFixed(1)}) translate(464 178) scale(${s.toFixed(
-          3
-        )}) translate(-464 -178)`
+        `translate(0 ${rise.toFixed(1)}) translate(${CHIP_ANCHOR.x} ${
+          CHIP_ANCHOR.y
+        }) scale(${s.toFixed(3)}) translate(${-CHIP_ANCHOR.x} ${-CHIP_ANCHOR.y})`
       );
       ctaRef.current.style.opacity = shown.toFixed(2);
       ctaRef.current.style.pointerEvents = shown > 0.6 ? "auto" : "none";
@@ -363,6 +376,21 @@ export default function CricketSix() {
       rafRef.current = requestAnimationFrame(apply);
     }
   });
+
+  // Re-measure the rendered scene so the chip keeps a readable on-screen size.
+  useEffect(() => {
+    const measure = () => {
+      const w = svgRef.current?.getBoundingClientRect().width ?? 0;
+      if (!w) return;
+      const scale = ((CHIP_TARGET_PX / CHIP_FONT) * 580) / w;
+      chipScaleRef.current = Math.min(2.2, Math.max(1, scale));
+      setCta(ctaShownRef.current);
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (reduce) {
@@ -425,6 +453,7 @@ export default function CricketSix() {
 
         <div className="mx-auto mt-8 max-w-[680px]">
           <svg
+            ref={svgRef}
             viewBox="0 0 580 250"
             className="w-full overflow-visible select-none"
             role="group"
