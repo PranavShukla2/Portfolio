@@ -83,6 +83,8 @@ export default function CricketSix() {
   const trail2Ref = useRef<SVGGElement>(null);
   const trail3Ref = useRef<SVGGElement>(null);
   const sparkRef = useRef<SVGGElement>(null);
+  const shadowRef = useRef<SVGGElement>(null);
+  const dustRef = useRef<SVGGElement>(null);
   const trajectoryPathRef = useRef<SVGPathElement>(null);
   const sixRef = useRef<SVGGElement>(null);
 
@@ -138,6 +140,7 @@ export default function CricketSix() {
     let flightT = 0;
     let inFlight = false;
     let ballSquash = 0;
+    let dropT = -1;
 
     if (p < 0.12) {
       // Before bowler releases: hidden
@@ -167,7 +170,7 @@ export default function CricketSix() {
       ballOpacity = 1;
     } else {
       // Coming down over the rope: free fall, bounce, bounce, settle
-      const dropT = inv(p, 0.58, 0.78);
+      dropT = inv(p, 0.58, 0.78);
       ballX = lerp(P_END.x, REST_X, 1 - (1 - dropT) * (1 - dropT));
       ballY = getDropY(dropT);
       ballSquash = getSquash(dropT);
@@ -241,6 +244,50 @@ export default function CricketSix() {
         ).toFixed(2)}`;
       } else {
         trajectoryPathRef.current.style.opacity = "0";
+      }
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // 3b. GROUND SHADOW & TURF DUST (only while the ball is coming down)
+    // ─────────────────────────────────────────────────────────────
+    if (shadowRef.current) {
+      if (dropT >= 0) {
+        // tight and dark on the turf, wide and faint when the ball is high
+        const height = clamp01((GROUND_Y - ballY) / 90);
+        shadowRef.current.setAttribute(
+          "transform",
+          `translate(${ballX.toFixed(1)} 216) scale(${(1 + height).toFixed(
+            2
+          )} 1)`
+        );
+        shadowRef.current.style.opacity = ((1 - height) * 0.5).toFixed(2);
+      } else {
+        shadowRef.current.style.opacity = "0";
+      }
+    }
+
+    if (dustRef.current) {
+      // a puff on the first landing, a smaller one on the second bounce
+      let puff = -1;
+      let puffScale = 1;
+      let puffAt = 0.34;
+      if (dropT >= 0.34 && dropT < 0.58) {
+        puff = (dropT - 0.34) / 0.24;
+      } else if (dropT >= 0.62 && dropT < 0.8) {
+        puff = (dropT - 0.62) / 0.18;
+        puffScale = 0.5;
+        puffAt = 0.62;
+      }
+      if (puff < 0) {
+        dustRef.current.style.opacity = "0";
+      } else {
+        const at = lerp(P_END.x, REST_X, 1 - (1 - puffAt) * (1 - puffAt));
+        const spread = puffScale * lerp(0.35, 1.5, puff);
+        dustRef.current.setAttribute(
+          "transform",
+          `translate(${at.toFixed(1)} 214) scale(${spread.toFixed(2)})`
+        );
+        dustRef.current.style.opacity = (1 - puff).toFixed(2);
       }
     }
 
@@ -599,6 +646,18 @@ export default function CricketSix() {
               style={{ opacity: 0 }}
             >
               <circle cx="0" cy="0" r="7.5" fill="#ff5e57" />
+            </g>
+
+            {/* ── Landing Shadow & Turf Dust ── */}
+            <g ref={shadowRef} transform="translate(535 216)" style={{ opacity: 0 }}>
+              <ellipse cx="0" cy="0" rx="10" ry="3" fill="rgba(132,94,194,0.45)" />
+            </g>
+            <g ref={dustRef} transform="translate(538 214) scale(0)" style={{ opacity: 0 }}>
+              <ellipse cx="-13" cy="-2" rx="9" ry="5" fill="rgba(132,94,194,0.3)" />
+              <ellipse cx="1" cy="-7" rx="11" ry="6" fill="rgba(132,94,194,0.22)" />
+              <ellipse cx="14" cy="-2" rx="8" ry="4.5" fill="rgba(132,94,194,0.3)" />
+              <circle cx="-22" cy="-9" r="3" fill="rgba(132,94,194,0.25)" />
+              <circle cx="21" cy="-11" r="2.5" fill="rgba(132,94,194,0.25)" />
             </g>
 
             {/* ── Main Cricket Ball ── */}
