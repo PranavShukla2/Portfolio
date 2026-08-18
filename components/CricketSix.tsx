@@ -8,13 +8,23 @@ const clamp01 = (x: number) => Math.min(1, Math.max(0, x));
 const inv = (p: number, a: number, b: number) => clamp01((p - a) / (b - a));
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
-/**
- * Scroll-driven cricket scene: as the section passes through the viewport the
- * batsman swings and launches a straight six, the ball arcs up and away, and a
- * gradient "SIX!" pops. Attributes are driven directly off scrollYProgress via
- * a throttled rAF (reliable for SVG transforms). Under prefers-reduced-motion
- * it renders a clean static end-state.
- */
+// Quadratic Bézier interpolation for smooth parabolic flight
+const bezier = (p0: number, p1: number, p2: number, t: number) => {
+  const mt = 1 - t;
+  return mt * mt * p0 + 2 * mt * t * p1 + t * t * p2;
+};
+
+// Parabolic trajectory control points:
+// Start at sweet-spot impact -> Apex in the sky -> Boundary landing
+// Bat pivot is at (156, 130); sweet spot at r=70 rotated 110deg = (221.8, 153.9) -> (222, 154)
+const P_START = { x: 222, y: 154 };
+const P_APEX = { x: 375, y: 18 };
+const P_END = { x: 535, y: 125 };
+
+const getTrajectoryPos = (t: number) => ({
+  x: bezier(P_START.x, P_APEX.x, P_END.x, t),
+  y: bezier(P_START.y, P_APEX.y, P_END.y, t),
+});
 export default function CricketSix() {
   const reduce = useReducedMotion();
   const ref = useRef<HTMLDivElement>(null);
@@ -65,14 +75,48 @@ export default function CricketSix() {
       );
     }
 
-    // ball launches at contact and arcs up-and-away
-    const bx = lerp(176, 500, inv(p, 0.34, 0.9));
-    const by =
-      p < 0.62 ? lerp(178, 50, inv(p, 0.34, 0.62)) : lerp(50, 120, inv(p, 0.62, 0.9));
-    const bo = p < 0.38 ? inv(p, 0.34, 0.38) : 1 - inv(p, 0.88, 0.99);
+    // ─────────────────────────────────────────────────────────────
+    // 2. BALL PHYSICS & TRAJECTORY (Incoming -> Impact -> Flight)
+    // ─────────────────────────────────────────────────────────────
+    let ballX = 0;
+    let ballY = 0;
+    let ballOpacity = 0;
+    let flightT = 0;
+
+    if (p < 0.12) {
+      // Before bowler releases: hidden
+      ballOpacity = 0;
+    } else if (p < 0.28) {
+      // Incoming delivery from bowler (bounces on pitch & rises to bat sweet spot)
+      const inT = inv(p, 0.12, 0.28);
+      ballOpacity = inv(p, 0.12, 0.16);
+      if (inT < 0.52) {
+        // Pitching towards ground
+        const subT = inT / 0.52;
+        ballX = lerp(490, 330, subT);
+        ballY = lerp(130, 210, subT);
+      } else {
+        // Off pitch rising straight to bat sweet spot (222, 154)
+        const subT = (inT - 0.52) / 0.48;
+        ballX = lerp(330, P_START.x, subT);
+        ballY = lerp(210, P_START.y, subT);
+      }
+    } else {
+      // After impact: soaring parabolic six arc
+      flightT = inv(p, 0.28, 0.88);
+      const pos = getTrajectoryPos(flightT);
+      ballX = pos.x;
+      ballY = pos.y;
+      ballOpacity = p > 0.85 ? 1 - inv(p, 0.85, 0.98) : 1;
+    }
+
+    // Position main ball
     if (ballRef.current) {
-      ballRef.current.setAttribute("transform", `translate(${bx.toFixed(1)} ${by.toFixed(1)})`);
-      ballRef.current.style.opacity = `${clamp01(bo).toFixed(2)}`;
+      ballRef.current.setAttribute(
+        "transform",
+        `translate(${ballX.toFixed(1)} ${ballY.toFixed(1)})`
+      );
+      ballRef.current.style.opacity = ballOpacity.toFixed(2);
     }
 
     const s = lerp(0.5, 1, inv(p, 0.46, 0.62));
@@ -141,6 +185,12 @@ export default function CricketSix() {
                 <stop offset="50%" stopColor="#ff4e9b" />
                 <stop offset="100%" stopColor="#845ec2" />
               </linearGradient>
+
+              <radialGradient id="ballGrad" cx="35%" cy="35%" r="65%">
+                <stop offset="0%" stopColor="#ff5e57" />
+                <stop offset="55%" stopColor="#d63031" />
+                <stop offset="100%" stopColor="#800e0e" />
+              </radialGradient>
             </defs>
 
             {/* ── Pitch & ground markings ── */}
@@ -326,13 +376,23 @@ export default function CricketSix() {
               <rect x="-7" y="-72" width="14" height="20" rx="2" fill="#ff4e9b" opacity="0.9" />
             </g>
 
-            {/* ── ball + trail ── */}
-            <g ref={ballRef} transform="translate(158 186)" style={{ opacity: 0 }}>
-              <circle cx="-34" cy="16" r="5" fill="#c0392b" opacity="0.2" />
-              <circle cx="-22" cy="9" r="6.5" fill="#c0392b" opacity="0.35" />
-              <circle cx="-11" cy="4" r="8" fill="#c0392b" opacity="0.55" />
-              <circle cx="0" cy="0" r="9" fill="#c0392b" />
-              <path d="M-6 -6 A 9 9 0 0 1 6 6" fill="none" stroke="#fff" strokeWidth="1.4" opacity="0.85" />
+            {/* ── Main Cricket Ball ── */}
+            <g
+              ref={ballRef}
+              transform={`translate(${P_START.x} ${P_START.y})`}
+              style={{ opacity: 0 }}
+            >
+              <circle cx="0" cy="0" r="9" fill="url(#ballGrad)" />
+              {/* White Cricket Seam */}
+              <path
+                d="M -7 -4 Q 0 0 7 4"
+                fill="none"
+                stroke="#ffffff"
+                strokeWidth="1.5"
+                strokeDasharray="2 1.5"
+                opacity="0.9"
+              />
+              <circle cx="-3" cy="-3" r="2.5" fill="#ffffff" opacity="0.4" />
             </g>
 
             {/* ── SIX! ── */}
