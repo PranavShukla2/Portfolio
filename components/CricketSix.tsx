@@ -25,9 +25,12 @@ const getTrajectoryPos = (t: number) => ({
   x: bezier(P_START.x, P_APEX.x, P_END.x, t),
   y: bezier(P_START.y, P_APEX.y, P_END.y, t),
 });
+
 export default function CricketSix() {
   const reduce = useReducedMotion();
   const ref = useRef<HTMLDivElement>(null);
+
+  // SVG animated element refs
   const batRef = useRef<SVGGElement>(null);
   const armsRef = useRef<SVGGElement>(null);
   const ballRef = useRef<SVGGElement>(null);
@@ -37,6 +40,7 @@ export default function CricketSix() {
   const sparkRef = useRef<SVGGElement>(null);
   const trajectoryPathRef = useRef<SVGPathElement>(null);
   const sixRef = useRef<SVGGElement>(null);
+
   const rafRef = useRef<number | null>(null);
   const pRef = useRef(0);
 
@@ -195,17 +199,25 @@ export default function CricketSix() {
       }
     }
 
-    const s = lerp(0.5, 1, inv(p, 0.46, 0.62));
-    const so = p < 0.56 ? inv(p, 0.46, 0.56) : 1 - inv(p, 0.9, 0.99);
+    // ─────────────────────────────────────────────────────────────
+    // 5. "SIX!" TEXT
+    // ─────────────────────────────────────────────────────────────
     if (sixRef.current) {
-      sixRef.current.setAttribute("transform", `translate(430 66) scale(${s.toFixed(3)})`);
+      const s = lerp(0.5, 1, inv(p, 0.46, 0.62));
+      const so = p < 0.56 ? inv(p, 0.46, 0.56) : 1 - inv(p, 0.9, 0.99);
+      sixRef.current.setAttribute(
+        "transform",
+        `translate(430 66) scale(${s.toFixed(3)})`
+      );
       sixRef.current.style.opacity = `${clamp01(so).toFixed(2)}`;
     }
   };
 
   useMotionValueEvent(scrollYProgress, "change", (v) => {
     pRef.current = v;
-    if (!reduce && rafRef.current == null) rafRef.current = requestAnimationFrame(apply);
+    if (!reduce && rafRef.current == null) {
+      rafRef.current = requestAnimationFrame(apply);
+    }
   });
 
   useEffect(() => {
@@ -361,6 +373,7 @@ export default function CricketSix() {
               pathLength="1"
               style={{ strokeDashoffset: "1", opacity: 0 }}
             />
+
             {/* ── Batsman ── */}
             <g id="batsman">
               {/* Back Leg & Pad */}
@@ -501,6 +514,7 @@ export default function CricketSix() {
               <line x1="-12" y1="-12" x2="12" y2="12" stroke="#ffb347" strokeWidth="2" strokeLinecap="round" />
               <line x1="-12" y1="12" x2="12" y2="-12" stroke="#ffb347" strokeWidth="2" strokeLinecap="round" />
             </g>
+
             {/* ── Curve-following Trail Ghosts ── */}
             <g
               ref={trail3Ref}
@@ -523,6 +537,7 @@ export default function CricketSix() {
             >
               <circle cx="0" cy="0" r="7.5" fill="#ff5e57" />
             </g>
+
             {/* ── Main Cricket Ball ── */}
             <g
               ref={ballRef}
