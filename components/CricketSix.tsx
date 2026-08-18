@@ -98,23 +98,27 @@ export default function CricketSix() {
     offset: ["start end", "end start"],
   });
 
+  // The scene is scored against scroll progress, but only part of that range is
+  // usable: the page ends below this section so p never gets past ~0.8, and the
+  // SVG is only fully on screen between roughly 0.35 and 0.70. The whole story —
+  // delivery, shot, landing, chip — therefore plays out inside 0.28 to 0.66.
   const apply = () => {
     rafRef.current = null;
     const p = pRef.current;
 
     // ─────────────────────────────────────────────────────────────
     // 1. BAT & ARMS SWING MECHANICS (Biomechanically correct):
-    // - Phase A (p: 0.00 -> 0.16): Ready stance / Backlift (~ -40 deg, bat up-back)
-    // - Phase B (p: 0.16 -> 0.28): Downswing reaching sweet-spot impact (+110 deg at contact)
-    // - Phase C (p: 0.28 -> 0.60): Lofted high follow-through (~ +32 deg, bat pointing into sky)
+    // - Phase A (p: 0.00 -> 0.26): Ready stance / Backlift (~ -40 deg, bat up-back)
+    // - Phase B (p: 0.26 -> 0.38): Downswing reaching sweet-spot impact (+110 deg at contact)
+    // - Phase C (p: 0.38 -> 0.62): Lofted high follow-through (~ +32 deg, bat pointing into sky)
     // ─────────────────────────────────────────────────────────────
     let batAngle = -40;
-    if (p < 0.16) {
+    if (p < 0.26) {
       batAngle = -40;
-    } else if (p < 0.28) {
-      batAngle = lerp(-40, 110, inv(p, 0.16, 0.28));
+    } else if (p < 0.38) {
+      batAngle = lerp(-40, 110, inv(p, 0.26, 0.38));
     } else {
-      batAngle = lerp(110, 32, inv(p, 0.28, 0.6));
+      batAngle = lerp(110, 32, inv(p, 0.38, 0.62));
     }
 
     if (batRef.current) {
@@ -126,7 +130,7 @@ export default function CricketSix() {
 
     // Dynamic arms follow bat pivot
     if (armsRef.current) {
-      const armRot = lerp(-12, 24, inv(p, 0.16, 0.5));
+      const armRot = lerp(-12, 24, inv(p, 0.26, 0.56));
       armsRef.current.setAttribute(
         "transform",
         `rotate(${armRot.toFixed(2)} 142 120)`
@@ -144,13 +148,13 @@ export default function CricketSix() {
     let ballSquash = 0;
     let dropT = -1;
 
-    if (p < 0.12) {
+    if (p < 0.28) {
       // Before bowler releases: hidden
       ballOpacity = 0;
-    } else if (p < 0.28) {
+    } else if (p < 0.38) {
       // Incoming delivery from bowler (bounces on pitch & rises to bat sweet spot)
-      const inT = inv(p, 0.12, 0.28);
-      ballOpacity = inv(p, 0.12, 0.16);
+      const inT = inv(p, 0.28, 0.38);
+      ballOpacity = inv(p, 0.28, 0.31);
       if (inT < 0.52) {
         // Pitching towards ground
         const subT = inT / 0.52;
@@ -162,17 +166,17 @@ export default function CricketSix() {
         ballX = lerp(330, P_START.x, subT);
         ballY = lerp(210, P_START.y, subT);
       }
-    } else if (p < 0.58) {
+    } else if (p < 0.5) {
       // After impact: soaring parabolic six arc
       inFlight = true;
-      flightT = inv(p, 0.28, 0.58);
+      flightT = inv(p, 0.38, 0.5);
       const pos = getTrajectoryPos(flightT);
       ballX = pos.x;
       ballY = pos.y;
       ballOpacity = 1;
     } else {
       // Coming down over the rope: free fall, bounce, bounce, settle
-      dropT = inv(p, 0.58, 0.78);
+      dropT = inv(p, 0.5, 0.62);
       ballX = lerp(P_END.x, REST_X, 1 - (1 - dropT) * (1 - dropT));
       ballY = getDropY(dropT);
       ballSquash = getSquash(dropT);
@@ -181,7 +185,7 @@ export default function CricketSix() {
 
     // Position main ball — it spins through the shot and squashes on landing
     if (ballRef.current) {
-      const spin = inv(p, 0.28, 0.78) * 640;
+      const spin = inv(p, 0.38, 0.62) * 640;
       const sx = 1 + ballSquash * 0.8;
       const sy = 1 - ballSquash;
       // keep the squashed ball sitting on the turf rather than hovering
@@ -236,13 +240,13 @@ export default function CricketSix() {
 
     // Traced dynamic path length
     if (trajectoryPathRef.current) {
-      if (p > 0.29) {
-        const traced = inv(p, 0.28, 0.58);
+      if (p > 0.39) {
+        const traced = inv(p, 0.38, 0.5);
         trajectoryPathRef.current.style.strokeDashoffset = `${(
           1 - traced
         ).toFixed(3)}`;
         trajectoryPathRef.current.style.opacity = `${(
-          0.85 * (1 - inv(p, 0.66, 0.82))
+          0.85 * (1 - inv(p, 0.62, 0.72))
         ).toFixed(2)}`;
       } else {
         trajectoryPathRef.current.style.opacity = "0";
@@ -297,8 +301,8 @@ export default function CricketSix() {
     // 4. IMPACT SPARK BURST (Directly on sweet spot contact)
     // ─────────────────────────────────────────────────────────────
     if (sparkRef.current) {
-      if (p >= 0.28 && p <= 0.40) {
-        const sparkProgress = inv(p, 0.28, 0.40);
+      if (p >= 0.38 && p <= 0.47) {
+        const sparkProgress = inv(p, 0.38, 0.47);
         const sparkScale = lerp(0.4, 1.3, sparkProgress);
         const sparkAlpha = 1 - sparkProgress;
         sparkRef.current.setAttribute(
@@ -315,8 +319,8 @@ export default function CricketSix() {
     // 5. "SIX!" TEXT
     // ─────────────────────────────────────────────────────────────
     if (sixRef.current) {
-      const s = lerp(0.5, 1, inv(p, 0.42, 0.56));
-      const so = p < 0.52 ? inv(p, 0.42, 0.52) : 1 - inv(p, 0.62, 0.74);
+      const s = lerp(0.5, 1, inv(p, 0.44, 0.54));
+      const so = p < 0.5 ? inv(p, 0.44, 0.5) : 1 - inv(p, 0.56, 0.64);
       sixRef.current.setAttribute(
         "transform",
         `translate(430 66) scale(${s.toFixed(3)})`
@@ -327,7 +331,7 @@ export default function CricketSix() {
     // ─────────────────────────────────────────────────────────────
     // 6. "LET'S CONNECT" — pops off the ball once it settles, and stays
     // ─────────────────────────────────────────────────────────────
-    setCta(inv(p, 0.74, 0.84));
+    setCta(inv(p, 0.6, 0.66));
   };
 
   // The chip only takes clicks (and tab focus) once it is actually on screen.
