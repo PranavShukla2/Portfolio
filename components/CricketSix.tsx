@@ -26,6 +26,51 @@ const getTrajectoryPos = (t: number) => ({
   y: bezier(P_START.y, P_APEX.y, P_END.y, t),
 });
 
+// Where the ball ends up: the pitch line sits at y=216 and the ball has r=9,
+// so a centre of 207 rests it exactly on the turf.
+const GROUND_Y = 207;
+const REST_X = 540;
+
+// The drop back down: a gravity-accelerated fall to the turf, then bounces
+// whose height decays like a real ball losing energy on each contact.
+const FALL_END = 0.34;
+const BOUNCES = [
+  { start: 0.34, end: 0.62, h: 46 },
+  { start: 0.62, end: 0.82, h: 18 },
+  { start: 0.82, end: 0.94, h: 6 },
+];
+
+const getDropY = (t: number) => {
+  if (t < FALL_END) {
+    const u = t / FALL_END;
+    return P_END.y + (GROUND_Y - P_END.y) * u * u;
+  }
+  for (const b of BOUNCES) {
+    if (t < b.end) {
+      const u = (t - b.start) / (b.end - b.start);
+      return GROUND_Y - b.h * 4 * u * (1 - u);
+    }
+  }
+  return GROUND_Y;
+};
+
+// Each turf contact squashes the ball for a moment, softer every time.
+const IMPACTS = [
+  { t: 0.34, s: 0.34 },
+  { t: 0.62, s: 0.18 },
+  { t: 0.82, s: 0.09 },
+  { t: 0.94, s: 0.04 },
+];
+
+const getSquash = (t: number) => {
+  let squash = 0;
+  for (const i of IMPACTS) {
+    const d = Math.abs(t - i.t);
+    if (d < 0.04) squash = Math.max(squash, i.s * (1 - d / 0.04));
+  }
+  return squash;
+};
+
 export default function CricketSix() {
   const reduce = useReducedMotion();
   const ref = useRef<HTMLDivElement>(null);
@@ -92,6 +137,7 @@ export default function CricketSix() {
     let ballOpacity = 0;
     let flightT = 0;
     let inFlight = false;
+    let ballSquash = 0;
 
     if (p < 0.12) {
       // Before bowler releases: hidden
@@ -111,21 +157,35 @@ export default function CricketSix() {
         ballX = lerp(330, P_START.x, subT);
         ballY = lerp(210, P_START.y, subT);
       }
-    } else {
+    } else if (p < 0.58) {
       // After impact: soaring parabolic six arc
       inFlight = true;
       flightT = inv(p, 0.28, 0.58);
       const pos = getTrajectoryPos(flightT);
       ballX = pos.x;
       ballY = pos.y;
-      ballOpacity = p > 0.62 ? 1 - inv(p, 0.62, 0.74) : 1;
+      ballOpacity = 1;
+    } else {
+      // Coming down over the rope: free fall, bounce, bounce, settle
+      const dropT = inv(p, 0.58, 0.78);
+      ballX = lerp(P_END.x, REST_X, 1 - (1 - dropT) * (1 - dropT));
+      ballY = getDropY(dropT);
+      ballSquash = getSquash(dropT);
+      ballOpacity = 1;
     }
 
-    // Position main ball
+    // Position main ball — it spins through the shot and squashes on landing
     if (ballRef.current) {
+      const spin = inv(p, 0.28, 0.78) * 640;
+      const sx = 1 + ballSquash * 0.8;
+      const sy = 1 - ballSquash;
+      // keep the squashed ball sitting on the turf rather than hovering
+      const cy = ballY + 9 * ballSquash;
       ballRef.current.setAttribute(
         "transform",
-        `translate(${ballX.toFixed(1)} ${ballY.toFixed(1)})`
+        `translate(${ballX.toFixed(1)} ${cy.toFixed(1)}) scale(${sx.toFixed(
+          3
+        )} ${sy.toFixed(3)}) rotate(${spin.toFixed(1)})`
       );
       ballRef.current.style.opacity = ballOpacity.toFixed(2);
     }
