@@ -19,6 +19,7 @@ export default function CricketSix() {
   const reduce = useReducedMotion();
   const ref = useRef<HTMLDivElement>(null);
   const batRef = useRef<SVGGElement>(null);
+  const armsRef = useRef<SVGGElement>(null);
   const ballRef = useRef<SVGGElement>(null);
   const sixRef = useRef<SVGGElement>(null);
   const rafRef = useRef<number | null>(null);
@@ -38,6 +39,15 @@ export default function CricketSix() {
     // 0deg = bat pointing up; 90 = right; 135 = down-right.
     const angle = lerp(135, 4, inv(p, 0.2, 0.6));
     batRef.current?.setAttribute("transform", `translate(150 132) rotate(${angle.toFixed(2)})`);
+
+    // Dynamic arms follow bat pivot
+    if (armsRef.current) {
+      const armRot = lerp(-12, 24, inv(p, 0.16, 0.5));
+      armsRef.current.setAttribute(
+        "transform",
+        `rotate(${armRot.toFixed(2)} 142 120)`
+      );
+    }
 
     // ball launches at contact and arcs up-and-away
     const bx = lerp(176, 500, inv(p, 0.34, 0.9));
@@ -172,23 +182,115 @@ export default function CricketSix() {
               <rect x="101" y="149" width="10" height="3" rx="1" fill="#e3c089" />
             </g>
 
-            {/* ── batsman ── */}
-            <g>
-              <rect x="134" y="150" width="12" height="60" rx="6" fill="#4f3578" />
-              <rect x="154" y="150" width="12" height="60" rx="6" fill="#4f3578" />
-              <ellipse cx="140" cy="212" rx="11" ry="5" fill="#2b1b3d" />
-              <ellipse cx="160" cy="212" rx="11" ry="5" fill="#2b1b3d" />
-              <rect x="126" y="102" width="48" height="56" rx="15" fill="#ff4e9b" />
-              {/* head — mirrored about x=150 so the face points right, toward the shot */}
-              <g transform="matrix(-1 0 0 1 300 0)">
-                <circle cx="150" cy="88" r="16" fill="#eeb98c" />
-                <path d="M134 86 a16 16 0 0 1 32 0 z" fill="#2b1b3d" />
-                <rect x="159" y="84" width="9" height="12" rx="3" fill="#2b1b3d" />
-                {/* helmet grille bars on the face side (right) */}
-                <g stroke="#2b1b3d" strokeWidth="1.4" opacity="0.9">
-                  <line x1="132" y1="86" x2="139" y2="86" />
-                  <line x1="131" y1="90" x2="139" y2="90" />
-                  <line x1="132" y1="94" x2="139" y2="94" />
+            {/* ── Batsman ── */}
+            <g id="batsman">
+              {/* Back Leg & Pad */}
+              <rect
+                x="134"
+                y="152"
+                width="14"
+                height="62"
+                rx="6"
+                fill="#ede8f5"
+                stroke="#4f3578"
+                strokeWidth="1.5"
+              />
+              <line
+                x1="135"
+                y1="178"
+                x2="147"
+                y2="178"
+                stroke="#4f3578"
+                strokeWidth="1.5"
+              />
+              <ellipse cx="138" cy="216" rx="11" ry="5" fill="#2b1b3d" />
+
+              {/* Front Leg & Pad (Stepping into the shot) */}
+              <rect
+                x="162"
+                y="150"
+                width="15"
+                height="64"
+                rx="6"
+                fill="#ffffff"
+                stroke="#845ec2"
+                strokeWidth="1.5"
+              />
+              {/* Pad Knee Rolls */}
+              <line
+                x1="163"
+                y1="174"
+                x2="176"
+                y2="174"
+                stroke="#845ec2"
+                strokeWidth="1.5"
+              />
+              <line
+                x1="163"
+                y1="179"
+                x2="176"
+                y2="179"
+                stroke="#845ec2"
+                strokeWidth="1.5"
+              />
+              <ellipse cx="168" cy="216" rx="12" ry="5.5" fill="#2b1b3d" />
+
+              {/* Torso & Athletic Jersey */}
+              <rect
+                x="132"
+                y="102"
+                width="44"
+                height="56"
+                rx="14"
+                fill="#ff4e9b"
+              />
+              {/* Jersey accent sash */}
+              <path
+                d="M 134 112 Q 154 130 174 120 L 174 132 Q 154 142 134 124 Z"
+                fill="#845ec2"
+                opacity="0.8"
+              />
+
+              {/* Connected Arms holding the bat */}
+              <g ref={armsRef}>
+                <path
+                  d="M 142 114 Q 150 126 156 130 M 166 114 Q 160 126 156 130"
+                  fill="none"
+                  stroke="#ff4e9b"
+                  strokeWidth="8"
+                  strokeLinecap="round"
+                />
+              </g>
+
+              {/* Head & Cricket Helmet */}
+              <g id="head">
+                {/* Face */}
+                <circle cx="154" cy="84" r="15" fill="#eeb98c" />
+                {/* Helmet Dome */}
+                <path
+                  d="M 139 84 A 15 15 0 0 1 169 84 Z"
+                  fill="#2b1b3d"
+                />
+                {/* Helmet Ear Guard */}
+                <rect
+                  x="142"
+                  y="83"
+                  width="10"
+                  height="12"
+                  rx="3"
+                  fill="#2b1b3d"
+                />
+                {/* Helmet Peak/Visor pointing towards shot (Right) */}
+                <polygon
+                  points="165,77 176,82 165,84"
+                  fill="#2b1b3d"
+                />
+                {/* Protective Metal Face Grille */}
+                <g stroke="#e3c089" strokeWidth="1.3" opacity="0.95">
+                  <line x1="158" y1="84" x2="171" y2="84" />
+                  <line x1="156" y1="89" x2="170" y2="89" />
+                  <line x1="158" y1="94" x2="168" y2="94" />
+                  <line x1="168" y1="82" x2="168" y2="96" />
                 </g>
               </g>
             </g>
