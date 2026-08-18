@@ -87,6 +87,8 @@ export default function CricketSix() {
   const dustRef = useRef<SVGGElement>(null);
   const trajectoryPathRef = useRef<SVGPathElement>(null);
   const sixRef = useRef<SVGGElement>(null);
+  const ctaRef = useRef<SVGGElement>(null);
+  const ctaLinkRef = useRef<HTMLAnchorElement>(null);
 
   const rafRef = useRef<number | null>(null);
   const pRef = useRef(0);
@@ -321,6 +323,34 @@ export default function CricketSix() {
       );
       sixRef.current.style.opacity = `${clamp01(so).toFixed(2)}`;
     }
+
+    // ─────────────────────────────────────────────────────────────
+    // 6. "LET'S CONNECT" — pops off the ball once it settles, and stays
+    // ─────────────────────────────────────────────────────────────
+    setCta(inv(p, 0.74, 0.84));
+  };
+
+  // The chip only takes clicks (and tab focus) once it is actually on screen.
+  const setCta = (shown: number) => {
+    if (ctaRef.current) {
+      const s = lerp(0.85, 1, shown);
+      const rise = lerp(10, 0, shown);
+      ctaRef.current.setAttribute(
+        "transform",
+        `translate(0 ${rise.toFixed(1)}) translate(464 178) scale(${s.toFixed(
+          3
+        )}) translate(-464 -178)`
+      );
+      ctaRef.current.style.opacity = shown.toFixed(2);
+      ctaRef.current.style.pointerEvents = shown > 0.6 ? "auto" : "none";
+    }
+    if (ctaLinkRef.current) {
+      ctaLinkRef.current.setAttribute("tabindex", shown > 0.6 ? "0" : "-1");
+      ctaLinkRef.current.setAttribute(
+        "aria-hidden",
+        shown > 0.6 ? "false" : "true"
+      );
+    }
   };
 
   useMotionValueEvent(scrollYProgress, "change", (v) => {
@@ -387,8 +417,8 @@ export default function CricketSix() {
           <svg
             viewBox="0 0 580 250"
             className="w-full overflow-visible select-none"
-            role="img"
-            aria-label="A batsman cleanly launching a cricket ball for a towering straight six"
+            role="group"
+            aria-label="A batsman launches a straight six; the ball lands and offers a link to email me"
           >
             <defs>
               <linearGradient id="sixGrad" x1="0" y1="0" x2="1" y2="1">
@@ -678,6 +708,49 @@ export default function CricketSix() {
               />
               <circle cx="-3" cy="-3" r="2.5" fill="#ffffff" opacity="0.4" />
             </g>
+
+            {/* ── "Let's connect" chip, spoken by the resting ball ── */}
+            <a
+              ref={ctaLinkRef}
+              href="mailto:pranavmshukla@gmail.com?subject=Let%27s%20connect"
+              aria-label="Email Pranav — let’s connect"
+              tabIndex={-1}
+              aria-hidden="true"
+              className="group cursor-pointer"
+            >
+              <g
+                ref={ctaRef}
+                transform="translate(0 10) translate(464 178) scale(0.85) translate(-464 -178)"
+                style={{ opacity: 0, pointerEvents: "none" }}
+              >
+                {/* tail first — the chip body paints over its top edge */}
+                <polygon
+                  points="514,186 530,186 539,199"
+                  className="fill-[var(--surface)] stroke-[var(--accent)]"
+                  strokeWidth="1.5"
+                />
+                <rect
+                  x="390"
+                  y="156"
+                  width="148"
+                  height="32"
+                  rx="16"
+                  strokeWidth="1.5"
+                  className="fill-[var(--surface)] stroke-[var(--accent)] transition-[fill] group-hover:fill-[var(--accent-wash)]"
+                />
+                <text
+                  x="464"
+                  y="177"
+                  textAnchor="middle"
+                  fontSize="13"
+                  className="fill-[var(--ink)]"
+                  style={{ fontFamily: "var(--font-mono)" }}
+                >
+                  Let&#8217;s connect{" "}
+                  <tspan className="fill-[var(--accent)]">&#8594;</tspan>
+                </text>
+              </g>
+            </a>
 
             {/* ── SIX! ── */}
             <g ref={sixRef} transform="translate(430 66) scale(0.5)" style={{ opacity: 0 }}>
