@@ -91,6 +91,7 @@ export default function CricketSix() {
     let ballY = 0;
     let ballOpacity = 0;
     let flightT = 0;
+    let inFlight = false;
 
     if (p < 0.12) {
       // Before bowler releases: hidden
@@ -112,11 +113,12 @@ export default function CricketSix() {
       }
     } else {
       // After impact: soaring parabolic six arc
-      flightT = inv(p, 0.28, 0.88);
+      inFlight = true;
+      flightT = inv(p, 0.28, 0.58);
       const pos = getTrajectoryPos(flightT);
       ballX = pos.x;
       ballY = pos.y;
-      ballOpacity = p > 0.85 ? 1 - inv(p, 0.85, 0.98) : 1;
+      ballOpacity = p > 0.62 ? 1 - inv(p, 0.62, 0.74) : 1;
     }
 
     // Position main ball
@@ -131,7 +133,7 @@ export default function CricketSix() {
     // ─────────────────────────────────────────────────────────────
     // 3. CURVE-FOLLOWING TRAIL GHOSTS (Sampled on actual flight path)
     // ─────────────────────────────────────────────────────────────
-    if (flightT > 0.02 && p <= 0.95) {
+    if (inFlight && flightT > 0.02 && flightT < 0.999) {
       const t1 = Math.max(0, flightT - 0.04);
       const t2 = Math.max(0, flightT - 0.08);
       const t3 = Math.max(0, flightT - 0.12);
@@ -169,13 +171,14 @@ export default function CricketSix() {
 
     // Traced dynamic path length
     if (trajectoryPathRef.current) {
-      if (flightT > 0.05) {
+      if (p > 0.29) {
+        const traced = inv(p, 0.28, 0.58);
         trajectoryPathRef.current.style.strokeDashoffset = `${(
-          1 - flightT
+          1 - traced
         ).toFixed(3)}`;
-        trajectoryPathRef.current.style.opacity = `${(0.85 * ballOpacity).toFixed(
-          2
-        )}`;
+        trajectoryPathRef.current.style.opacity = `${(
+          0.85 * (1 - inv(p, 0.66, 0.82))
+        ).toFixed(2)}`;
       } else {
         trajectoryPathRef.current.style.opacity = "0";
       }
@@ -203,8 +206,8 @@ export default function CricketSix() {
     // 5. "SIX!" TEXT
     // ─────────────────────────────────────────────────────────────
     if (sixRef.current) {
-      const s = lerp(0.5, 1, inv(p, 0.46, 0.62));
-      const so = p < 0.56 ? inv(p, 0.46, 0.56) : 1 - inv(p, 0.9, 0.99);
+      const s = lerp(0.5, 1, inv(p, 0.42, 0.56));
+      const so = p < 0.52 ? inv(p, 0.42, 0.52) : 1 - inv(p, 0.62, 0.74);
       sixRef.current.setAttribute(
         "transform",
         `translate(430 66) scale(${s.toFixed(3)})`
