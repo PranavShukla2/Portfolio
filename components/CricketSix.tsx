@@ -383,6 +383,18 @@ export default function CricketSix() {
     }
   });
 
+  // Cloudflare's email obfuscation rewrites every mailto in the served HTML,
+  // and its decoder script only repairs HTML anchors — an SVG one like this is
+  // left pointing at Cloudflare's "Email Protection" page. Wiring the address
+  // up after hydration keeps it out of the markup, so nothing rewrites it.
+  useEffect(() => {
+    const to = ["pranavmshukla", "gmail.com"].join("@");
+    ctaLinkRef.current?.setAttribute(
+      "href",
+      `mailto:${to}?subject=${encodeURIComponent("Let's connect")}`
+    );
+  }, []);
+
   // Re-measure whenever the page can change shape: the chip needs a readable
   // on-screen size, and the timeline needs to fit the scroll that actually exists.
   useEffect(() => {
@@ -778,7 +790,6 @@ export default function CricketSix() {
             {/* ── "Let's connect" chip, spoken by the resting ball ── */}
             <a
               ref={ctaLinkRef}
-              href="mailto:pranavmshukla@gmail.com?subject=Let%27s%20connect"
               aria-label="Email Pranav — let’s connect"
               tabIndex={-1}
               aria-hidden="true"
