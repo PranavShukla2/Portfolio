@@ -102,12 +102,12 @@ export default function CricketSix() {
           </p>
         </div>
 
-        <div className="mx-auto mt-8 max-w-[640px]">
+        <div className="mx-auto mt-8 max-w-[680px]">
           <svg
-            viewBox="0 0 560 240"
-            className="w-full overflow-visible"
+            viewBox="0 0 580 250"
+            className="w-full overflow-visible select-none"
             role="img"
-            aria-label="A batsman hitting a straight six"
+            aria-label="A batsman cleanly launching a cricket ball for a towering straight six"
           >
             <defs>
               <linearGradient id="sixGrad" x1="0" y1="0" x2="1" y2="1">
@@ -117,9 +117,60 @@ export default function CricketSix() {
               </linearGradient>
             </defs>
 
-            {/* pitch line + shadow */}
-            <line x1="30" y1="212" x2="530" y2="212" stroke="var(--line-strong)" strokeWidth="2" />
-            <ellipse cx="148" cy="214" rx="42" ry="6" fill="rgba(132,94,194,0.16)" />
+            {/* ── Pitch & ground markings ── */}
+            <line
+              x1="25"
+              y1="216"
+              x2="555"
+              y2="216"
+              stroke="var(--line-strong)"
+              strokeWidth="2"
+              strokeDasharray="4 4"
+              opacity="0.45"
+            />
+            {/* Batting Crease */}
+            <line
+              x1="130"
+              y1="204"
+              x2="130"
+              y2="228"
+              stroke="var(--line-strong)"
+              strokeWidth="2.5"
+            />
+            <line
+              x1="180"
+              y1="208"
+              x2="180"
+              y2="224"
+              stroke="var(--line-strong)"
+              strokeWidth="2"
+              opacity="0.6"
+            />
+            {/* Soft ground shadows */}
+            <ellipse
+              cx="100"
+              cy="217"
+              rx="16"
+              ry="4"
+              fill="rgba(132,94,194,0.15)"
+            />
+            <ellipse
+              cx="155"
+              cy="218"
+              rx="46"
+              ry="7"
+              fill="rgba(132,94,194,0.22)"
+            />
+
+            {/* ── Stumps & Bails ── */}
+            <g id="stumps">
+              <rect x="94" y="152" width="3.5" height="64" rx="1.5" fill="#caa269" />
+              <rect x="100" y="152" width="3.5" height="64" rx="1.5" fill="#caa269" />
+              <rect x="106" y="152" width="3.5" height="64" rx="1.5" fill="#caa269" />
+              {/* Bails */}
+              <rect x="92" y="149" width="10" height="3" rx="1" fill="#e3c089" />
+              <rect x="101" y="149" width="10" height="3" rx="1" fill="#e3c089" />
+            </g>
 
             {/* ── batsman ── */}
             <g>
