@@ -31,6 +31,10 @@ export default function CricketSix() {
   const batRef = useRef<SVGGElement>(null);
   const armsRef = useRef<SVGGElement>(null);
   const ballRef = useRef<SVGGElement>(null);
+  const trail1Ref = useRef<SVGGElement>(null);
+  const trail2Ref = useRef<SVGGElement>(null);
+  const trail3Ref = useRef<SVGGElement>(null);
+  const trajectoryPathRef = useRef<SVGPathElement>(null);
   const sixRef = useRef<SVGGElement>(null);
   const rafRef = useRef<number | null>(null);
   const pRef = useRef(0);
@@ -119,6 +123,59 @@ export default function CricketSix() {
       ballRef.current.style.opacity = ballOpacity.toFixed(2);
     }
 
+    // ─────────────────────────────────────────────────────────────
+    // 3. CURVE-FOLLOWING TRAIL GHOSTS (Sampled on actual flight path)
+    // ─────────────────────────────────────────────────────────────
+    if (flightT > 0.02 && p <= 0.95) {
+      const t1 = Math.max(0, flightT - 0.04);
+      const t2 = Math.max(0, flightT - 0.08);
+      const t3 = Math.max(0, flightT - 0.12);
+
+      const pos1 = getTrajectoryPos(t1);
+      const pos2 = getTrajectoryPos(t2);
+      const pos3 = getTrajectoryPos(t3);
+
+      if (trail1Ref.current) {
+        trail1Ref.current.setAttribute(
+          "transform",
+          `translate(${pos1.x.toFixed(1)} ${pos1.y.toFixed(1)})`
+        );
+        trail1Ref.current.style.opacity = `${(0.65 * ballOpacity).toFixed(2)}`;
+      }
+      if (trail2Ref.current) {
+        trail2Ref.current.setAttribute(
+          "transform",
+          `translate(${pos2.x.toFixed(1)} ${pos2.y.toFixed(1)})`
+        );
+        trail2Ref.current.style.opacity = `${(0.4 * ballOpacity).toFixed(2)}`;
+      }
+      if (trail3Ref.current) {
+        trail3Ref.current.setAttribute(
+          "transform",
+          `translate(${pos3.x.toFixed(1)} ${pos3.y.toFixed(1)})`
+        );
+        trail3Ref.current.style.opacity = `${(0.2 * ballOpacity).toFixed(2)}`;
+      }
+    } else {
+      if (trail1Ref.current) trail1Ref.current.style.opacity = "0";
+      if (trail2Ref.current) trail2Ref.current.style.opacity = "0";
+      if (trail3Ref.current) trail3Ref.current.style.opacity = "0";
+    }
+
+    // Traced dynamic path length
+    if (trajectoryPathRef.current) {
+      if (flightT > 0.05) {
+        trajectoryPathRef.current.style.strokeDashoffset = `${(
+          1 - flightT
+        ).toFixed(3)}`;
+        trajectoryPathRef.current.style.opacity = `${(0.85 * ballOpacity).toFixed(
+          2
+        )}`;
+      } else {
+        trajectoryPathRef.current.style.opacity = "0";
+      }
+    }
+
     const s = lerp(0.5, 1, inv(p, 0.46, 0.62));
     const so = p < 0.56 ? inv(p, 0.46, 0.56) : 1 - inv(p, 0.9, 0.99);
     if (sixRef.current) {
@@ -186,6 +243,12 @@ export default function CricketSix() {
                 <stop offset="100%" stopColor="#845ec2" />
               </linearGradient>
 
+              <linearGradient id="trailGrad" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stopColor="#ff6b6b" stopOpacity="0" />
+                <stop offset="40%" stopColor="#ff4e9b" stopOpacity="0.5" />
+                <stop offset="100%" stopColor="#ffb347" stopOpacity="0.9" />
+              </linearGradient>
+
               <radialGradient id="ballGrad" cx="35%" cy="35%" r="65%">
                 <stop offset="0%" stopColor="#ff5e57" />
                 <stop offset="55%" stopColor="#d63031" />
@@ -248,6 +311,18 @@ export default function CricketSix() {
               <rect x="101" y="149" width="10" height="3" rx="1" fill="#e3c089" />
             </g>
 
+            {/* ── Parabolic Trajectory Guide Line (Revealed on flight) ── */}
+            <path
+              ref={trajectoryPathRef}
+              d={`M ${P_START.x} ${P_START.y} Q ${P_APEX.x} ${P_APEX.y} ${P_END.x} ${P_END.y}`}
+              fill="none"
+              stroke="url(#trailGrad)"
+              strokeWidth="3.5"
+              strokeLinecap="round"
+              strokeDasharray="1"
+              pathLength="1"
+              style={{ strokeDashoffset: "1", opacity: 0 }}
+            />
             {/* ── Batsman ── */}
             <g id="batsman">
               {/* Back Leg & Pad */}
@@ -376,6 +451,28 @@ export default function CricketSix() {
               <rect x="-7" y="-72" width="14" height="20" rx="2" fill="#ff4e9b" opacity="0.9" />
             </g>
 
+            {/* ── Curve-following Trail Ghosts ── */}
+            <g
+              ref={trail3Ref}
+              transform={`translate(${P_START.x} ${P_START.y})`}
+              style={{ opacity: 0 }}
+            >
+              <circle cx="0" cy="0" r="4.5" fill="#ff6b6b" />
+            </g>
+            <g
+              ref={trail2Ref}
+              transform={`translate(${P_START.x} ${P_START.y})`}
+              style={{ opacity: 0 }}
+            >
+              <circle cx="0" cy="0" r="6" fill="#ff4e9b" />
+            </g>
+            <g
+              ref={trail1Ref}
+              transform={`translate(${P_START.x} ${P_START.y})`}
+              style={{ opacity: 0 }}
+            >
+              <circle cx="0" cy="0" r="7.5" fill="#ff5e57" />
+            </g>
             {/* ── Main Cricket Ball ── */}
             <g
               ref={ballRef}
