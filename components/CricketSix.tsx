@@ -370,9 +370,13 @@ export default function CricketSix() {
       if (ballRef.current) {
         ballRef.current.setAttribute(
           "transform",
-          `translate(${P_END.x} ${P_END.y})`
+          `translate(${REST_X} ${GROUND_Y})`
         );
         ballRef.current.style.opacity = "1";
+      }
+      if (shadowRef.current) {
+        shadowRef.current.setAttribute("transform", `translate(${REST_X} 216)`);
+        shadowRef.current.style.opacity = "0.5";
       }
       if (sixRef.current) {
         sixRef.current.setAttribute(
@@ -385,6 +389,8 @@ export default function CricketSix() {
         trajectoryPathRef.current.style.strokeDashoffset = "0";
         trajectoryPathRef.current.style.opacity = "0.7";
       }
+      // the chip is the point of the scene — always live, motion or not
+      setCta(1);
     } else {
       apply();
     }
