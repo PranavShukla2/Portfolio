@@ -34,11 +34,27 @@ export default function CricketSix() {
     rafRef.current = null;
     const p = pRef.current;
 
-    // a lofted-six swing: one fluid sweep from a low backlift (bat down-right)
-    // UP through contact (~horizontal) to a high follow-through (bat up).
-    // 0deg = bat pointing up; 90 = right; 135 = down-right.
-    const angle = lerp(135, 4, inv(p, 0.2, 0.6));
-    batRef.current?.setAttribute("transform", `translate(150 132) rotate(${angle.toFixed(2)})`);
+    // ─────────────────────────────────────────────────────────────
+    // 1. BAT & ARMS SWING MECHANICS (Biomechanically correct):
+    // - Phase A (p: 0.00 -> 0.16): Ready stance / Backlift (~ -40 deg, bat up-back)
+    // - Phase B (p: 0.16 -> 0.28): Downswing reaching sweet-spot impact (+110 deg at contact)
+    // - Phase C (p: 0.28 -> 0.60): Lofted high follow-through (~ +32 deg, bat pointing into sky)
+    // ─────────────────────────────────────────────────────────────
+    let batAngle = -40;
+    if (p < 0.16) {
+      batAngle = -40;
+    } else if (p < 0.28) {
+      batAngle = lerp(-40, 110, inv(p, 0.16, 0.28));
+    } else {
+      batAngle = lerp(110, 32, inv(p, 0.28, 0.6));
+    }
+
+    if (batRef.current) {
+      batRef.current.setAttribute(
+        "transform",
+        `translate(156 130) rotate(${batAngle.toFixed(2)})`
+      );
+    }
 
     // Dynamic arms follow bat pivot
     if (armsRef.current) {
@@ -295,12 +311,19 @@ export default function CricketSix() {
               </g>
             </g>
 
-            {/* ── bat (swings around the hands at 150,132) ── */}
-            <g ref={batRef} transform="translate(150 132) rotate(135)">
-              <circle cx="0" cy="0" r="7" fill="#eeb98c" />
-              <rect x="-4" y="-26" width="8" height="26" rx="3" fill="#3a2a22" />
-              <rect x="-8" y="-104" width="16" height="80" rx="7" fill="#e3c089" />
-              <line x1="0" y1="-100" x2="0" y2="-30" stroke="#caa269" strokeWidth="2" />
+            {/* ── Bat (Swings dynamically around the hands pivot) ── */}
+            <g ref={batRef} transform="translate(156 130) rotate(-42)">
+              {/* Batting Gloves */}
+              <circle cx="0" cy="0" r="7.5" fill="#ffffff" stroke="#845ec2" strokeWidth="1.5" />
+              <circle cx="0" cy="-7" r="6.5" fill="#ffffff" stroke="#845ec2" strokeWidth="1.5" />
+              {/* Cane Handle & Rubber Grip */}
+              <rect x="-4" y="-32" width="8" height="26" rx="3" fill="#2b1b3d" />
+              {/* Bat Blade */}
+              <rect x="-8" y="-108" width="16" height="78" rx="6" fill="#e3c089" />
+              {/* Bat Spine / Ridge highlight */}
+              <line x1="0" y1="-104" x2="0" y2="-34" stroke="#caa269" strokeWidth="2.2" />
+              {/* Manufacturer Colored Sticker */}
+              <rect x="-7" y="-72" width="14" height="20" rx="2" fill="#ff4e9b" opacity="0.9" />
             </g>
 
             {/* ── ball + trail ── */}
