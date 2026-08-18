@@ -34,6 +34,7 @@ export default function CricketSix() {
   const trail1Ref = useRef<SVGGElement>(null);
   const trail2Ref = useRef<SVGGElement>(null);
   const trail3Ref = useRef<SVGGElement>(null);
+  const sparkRef = useRef<SVGGElement>(null);
   const trajectoryPathRef = useRef<SVGPathElement>(null);
   const sixRef = useRef<SVGGElement>(null);
   const rafRef = useRef<number | null>(null);
@@ -176,6 +177,24 @@ export default function CricketSix() {
       }
     }
 
+    // ─────────────────────────────────────────────────────────────
+    // 4. IMPACT SPARK BURST (Directly on sweet spot contact)
+    // ─────────────────────────────────────────────────────────────
+    if (sparkRef.current) {
+      if (p >= 0.28 && p <= 0.40) {
+        const sparkProgress = inv(p, 0.28, 0.40);
+        const sparkScale = lerp(0.4, 1.3, sparkProgress);
+        const sparkAlpha = 1 - sparkProgress;
+        sparkRef.current.setAttribute(
+          "transform",
+          `translate(${P_START.x} ${P_START.y}) scale(${sparkScale.toFixed(2)})`
+        );
+        sparkRef.current.style.opacity = sparkAlpha.toFixed(2);
+      } else {
+        sparkRef.current.style.opacity = "0";
+      }
+    }
+
     const s = lerp(0.5, 1, inv(p, 0.46, 0.62));
     const so = p < 0.56 ? inv(p, 0.46, 0.56) : 1 - inv(p, 0.9, 0.99);
     if (sixRef.current) {
@@ -253,6 +272,12 @@ export default function CricketSix() {
                 <stop offset="0%" stopColor="#ff5e57" />
                 <stop offset="55%" stopColor="#d63031" />
                 <stop offset="100%" stopColor="#800e0e" />
+              </radialGradient>
+
+              <radialGradient id="sparkGlow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stopColor="#ffffff" stopOpacity="1" />
+                <stop offset="50%" stopColor="#ffb347" stopOpacity="0.8" />
+                <stop offset="100%" stopColor="#ff4e9b" stopOpacity="0" />
               </radialGradient>
             </defs>
 
@@ -451,6 +476,18 @@ export default function CricketSix() {
               <rect x="-7" y="-72" width="14" height="20" rx="2" fill="#ff4e9b" opacity="0.9" />
             </g>
 
+            {/* ── Contact Shockwave Spark ── */}
+            <g
+              ref={sparkRef}
+              transform={`translate(${P_START.x} ${P_START.y}) scale(0)`}
+              style={{ opacity: 0 }}
+            >
+              <circle cx="0" cy="0" r="22" fill="url(#sparkGlow)" />
+              <line x1="-18" y1="0" x2="18" y2="0" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" />
+              <line x1="0" y1="-18" x2="0" y2="18" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" />
+              <line x1="-12" y1="-12" x2="12" y2="12" stroke="#ffb347" strokeWidth="2" strokeLinecap="round" />
+              <line x1="-12" y1="12" x2="12" y2="-12" stroke="#ffb347" strokeWidth="2" strokeLinecap="round" />
+            </g>
             {/* ── Curve-following Trail Ghosts ── */}
             <g
               ref={trail3Ref}
