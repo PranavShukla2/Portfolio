@@ -210,15 +210,28 @@ export default function CricketSix() {
 
   useEffect(() => {
     if (reduce) {
-      // static end-state: ball landed up-field, SIX shown
-      batRef.current?.setAttribute("transform", "translate(150 132) rotate(12)");
+      // Reduced motion: static beautiful end-state
+      batRef.current?.setAttribute(
+        "transform",
+        "translate(156 130) rotate(48)"
+      );
       if (ballRef.current) {
-        ballRef.current.setAttribute("transform", "translate(470 96)");
+        ballRef.current.setAttribute(
+          "transform",
+          `translate(${P_END.x} ${P_END.y})`
+        );
         ballRef.current.style.opacity = "1";
       }
       if (sixRef.current) {
-        sixRef.current.setAttribute("transform", "translate(430 66) scale(1)");
+        sixRef.current.setAttribute(
+          "transform",
+          "translate(430 66) scale(1)"
+        );
         sixRef.current.style.opacity = "1";
+      }
+      if (trajectoryPathRef.current) {
+        trajectoryPathRef.current.style.strokeDashoffset = "0";
+        trajectoryPathRef.current.style.opacity = "0.7";
       }
     } else {
       apply();
