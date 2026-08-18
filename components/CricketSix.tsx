@@ -68,6 +68,11 @@ const CHIP_ANCHOR = { x: 536, y: 196 };
 const CHIP_FONT = 13;
 const CHIP_TARGET_PX = 15;
 
+// Progress at which the story is over (the chip is fully out). On tall
+// viewports the page can run out of scroll before this, so the timeline is
+// compressed to whatever range is actually reachable.
+const FINALE = 0.7;
+
 const getSquash = (t: number) => {
   let squash = 0;
   for (const i of IMPACTS) {
@@ -103,6 +108,7 @@ export default function CricketSix() {
   // readable and tappable when the whole scene renders small
   const ctaShownRef = useRef(0);
   const chipScaleRef = useRef(1);
+  const pScaleRef = useRef(1);
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -115,7 +121,7 @@ export default function CricketSix() {
   // delivery, shot, landing, chip — therefore plays out inside 0.28 to 0.66.
   const apply = () => {
     rafRef.current = null;
-    const p = pRef.current;
+    const p = clamp01(pRef.current / pScaleRef.current);
 
     // ─────────────────────────────────────────────────────────────
     // 1. BAT & ARMS SWING MECHANICS (Biomechanically correct):
@@ -377,20 +383,41 @@ export default function CricketSix() {
     }
   });
 
-  // Re-measure the rendered scene so the chip keeps a readable on-screen size.
+  // Re-measure whenever the page can change shape: the chip needs a readable
+  // on-screen size, and the timeline needs to fit the scroll that actually exists.
   useEffect(() => {
     const measure = () => {
       const w = svgRef.current?.getBoundingClientRect().width ?? 0;
-      if (!w) return;
-      const scale = ((CHIP_TARGET_PX / CHIP_FONT) * 580) / w;
-      chipScaleRef.current = Math.min(2.2, Math.max(1, scale));
-      setCta(ctaShownRef.current);
+      if (w) {
+        const scale = ((CHIP_TARGET_PX / CHIP_FONT) * 580) / w;
+        chipScaleRef.current = Math.min(2.2, Math.max(1, scale));
+      }
+
+      const el = ref.current;
+      if (el) {
+        // highest progress this page can actually scroll to
+        const top = el.getBoundingClientRect().top + window.scrollY;
+        const span = window.innerHeight + el.offsetHeight;
+        const reachable =
+          (document.documentElement.scrollHeight - top) / span;
+        pScaleRef.current = Math.min(1, Math.max(0.35, reachable / FINALE));
+      }
+
+      // a resize must not animate the scene out from under reduced motion
+      if (reduce) setCta(1);
+      else apply();
     };
+
     measure();
     window.addEventListener("resize", measure);
-    return () => window.removeEventListener("resize", measure);
+    const ro = new ResizeObserver(measure);
+    ro.observe(document.documentElement);
+    return () => {
+      window.removeEventListener("resize", measure);
+      ro.disconnect();
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [reduce]);
 
   useEffect(() => {
     if (reduce) {
