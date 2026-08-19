@@ -55,7 +55,8 @@ export default function Board({
             const square = (cell?.square ??
               `${"abcdefgh"[file]}${rank}`) as Square;
 
-            const dark = (file + rank) % 2 === 0;
+            // a1 is dark, so odd file+rank sums are the dark squares
+            const dark = (file + rank) % 2 === 1;
             const isTarget = targets.includes(square);
             const isSelected = selected === square;
             const isLast =
