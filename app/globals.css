@@ -36,6 +36,10 @@
   /* terminal */
   --term-bg: #17121f;
   --term-line: #2e2440;
+
+  /* Chess board — kept mid-tone in both themes so both piece colours read */
+  --board-light: #f6edf9;
+  --board-dark: #cbb2e6;
 }
 
 /* ─── Dark palette ──────────────────────────────────────────────────
@@ -64,6 +68,8 @@
     --candy: linear-gradient(135deg, #ff7a7a, #ff5ea3, #9a78d6);
     --term-bg: #0f0b17;
     --term-line: #2e2440;
+    --board-light: #b3a1cc;
+    --board-dark: #7d67a6;
   }
 }
 :root[data-theme="dark"] {
@@ -87,6 +93,8 @@
   --candy: linear-gradient(135deg, #ff7a7a, #ff5ea3, #9a78d6);
   --term-bg: #0f0b17;
   --term-line: #2e2440;
+  --board-light: #b3a1cc;
+  --board-dark: #7d67a6;
 }
 
 /* ─── Base ──────────────────────────────────────────────────────── */

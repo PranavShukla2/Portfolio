@@ -28,6 +28,8 @@ const config: Config = {
         "accent-3": "var(--accent-3)",
         "accent-3-wash": "var(--accent-3-wash)",
         coral: "var(--coral)",
+        "board-light": "var(--board-light)",
+        "board-dark": "var(--board-dark)",
         term: "var(--term-bg)",
         "term-line": "var(--term-line)",
       },
