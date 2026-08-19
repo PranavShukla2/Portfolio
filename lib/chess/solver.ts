@@ -23,8 +23,12 @@ const ordered = (game: Chess) =>
     .moves({ verbose: true })
     .sort((a, b) => Number(b.san.includes("+")) - Number(a.san.includes("+")));
 
-/** Every defensive reply from here still loses to mate in `moves`. */
-const defenceIsLost = (game: Chess, moves: number): boolean => {
+/**
+ * Every defensive reply from here still loses to mate in `moves` — i.e. the
+ * move just played kept the mate alive. This is what the board checks after
+ * each of your moves.
+ */
+export const everyReplyLoses = (game: Chess, moves: number): boolean => {
   const replies = game.moves({ verbose: true });
   if (replies.length === 0) return false; // stalemate — the defender saved it
 
@@ -43,7 +47,7 @@ export const forcesMate = (game: Chess, moves: number): boolean => {
 
   for (const move of ordered(game)) {
     game.move(move);
-    const mate = game.isCheckmate() || (moves > 1 && defenceIsLost(game, moves - 1));
+    const mate = game.isCheckmate() || (moves > 1 && everyReplyLoses(game, moves - 1));
     game.undo();
     if (mate) return true;
   }
@@ -59,7 +63,7 @@ export const findMate = (game: Chess, moves: number): Reply | null => {
 
   for (const move of ordered(game)) {
     game.move(move);
-    const mate = game.isCheckmate() || (moves > 1 && defenceIsLost(game, moves - 1));
+    const mate = game.isCheckmate() || (moves > 1 && everyReplyLoses(game, moves - 1));
     game.undo();
     if (mate) return { san: move.san, from: move.from, to: move.to };
   }
@@ -73,7 +77,7 @@ export const matingMoves = (game: Chess, moves: number): Reply[] => {
 
   for (const move of game.moves({ verbose: true })) {
     game.move(move);
-    const mate = game.isCheckmate() || (moves > 1 && defenceIsLost(game, moves - 1));
+    const mate = game.isCheckmate() || (moves > 1 && everyReplyLoses(game, moves - 1));
     game.undo();
     if (mate) found.push({ san: move.san, from: move.from, to: move.to });
   }
