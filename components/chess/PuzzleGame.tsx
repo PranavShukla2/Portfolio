@@ -98,8 +98,15 @@ export default function PuzzleGame() {
     }
 
     const left = movesLeft - 1;
-    // did that move throw the mate away?
-    if (left <= 0 || !everyReplyLoses(game, left)) {
+    // At the root the answer is already known, which keeps the one expensive
+    // search — proving a wrong move has no mate behind it — off the main
+    // thread entirely. Deeper in, the solver is only milliseconds.
+    const stillMating =
+      played === 0
+        ? puzzle.keys.includes(move.san)
+        : left > 0 && everyReplyLoses(game, left);
+
+    if (!stillMating) {
       setStatus("wrong");
       return;
     }
@@ -149,6 +156,15 @@ export default function PuzzleGame() {
   };
 
   const showHint = () => {
+    if (played === 0) {
+      // the key move is known, so no search is needed for the first hint
+      const probe = new Chess(game.fen());
+      const move = probe.moves({ verbose: true }).find((candidate) =>
+        puzzle.keys.includes(candidate.san)
+      );
+      setHint(move ? (move.from as Square) : null);
+      return;
+    }
     const found = findMate(game, movesLeft);
     setHint(found ? (found.from as Square) : null);
   };
