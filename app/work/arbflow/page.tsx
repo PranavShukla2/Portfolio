@@ -3,20 +3,18 @@ import { Link } from "next-view-transitions";
 import { Eyebrow } from "@/components/Section";
 import Badge from "@/components/Badge";
 import Button from "@/components/Button";
+import {
+  FactCard,
+  HeaderBackdrop,
+  PointList,
+  StackPills,
+} from "@/components/work/CaseStudy";
 
 export const metadata: Metadata = {
   title: "ArbFlow — Multi-tenant GA4 analytics SaaS",
   description:
     "Case study: secure per-client workspaces, per-tenant data isolation, and a dashboard that surfaces what actually changed across GA4, Meta and LinkedIn. Live in production.",
 };
-
-const PALETTE = ["#ff4e9b", "#845ec2", "#e2563b", "#d98324"];
-const WASHES = [
-  "rgba(255,78,155,0.10)",
-  "rgba(132,94,194,0.12)",
-  "rgba(255,107,107,0.12)",
-  "rgba(255,179,71,0.16)",
-];
 
 const STACK_PILLS = [
   { label: "Next.js", color: "#ff4e9b", wash: "rgba(255,78,155,0.12)" },
@@ -66,55 +64,10 @@ const SECURITY = [
   //  - session/auth: how sessions + tenant claims are issued and verified
 ];
 
-/** Gradient-topped fact card with colour-dotted keys. */
-function FactCard({ rows }: { rows: { key: string; value: string }[] }) {
-  return (
-    <dl className="overflow-hidden rounded-2xl border border-line bg-surface shadow-[0_18px_50px_-24px_rgba(132,94,194,0.35)]">
-      <div className="bg-candy h-1.5 w-full" aria-hidden />
-      {rows.map((h, i) => (
-        <div
-          key={h.key}
-          className={`grid grid-cols-1 gap-2 px-6 py-5 sm:grid-cols-[170px_1fr] sm:gap-6 ${
-            i % 2 === 1 ? "bg-bg" : ""
-          }`}
-        >
-          <dt className="flex items-center gap-2.5 font-mono text-[11px] font-medium uppercase tracking-[0.12em]">
-            <span
-              className="h-2 w-2 rounded-full"
-              style={{ background: PALETTE[i % PALETTE.length] }}
-              aria-hidden
-            />
-            <span style={{ color: PALETTE[i % PALETTE.length] }}>{h.key}</span>
-          </dt>
-          <dd className="text-[15px] leading-relaxed text-ink">{h.value}</dd>
-        </div>
-      ))}
-    </dl>
-  );
-}
-
 export default function ArbFlowCaseStudy() {
   return (
     <article className="relative mx-auto w-full max-w-page px-6 py-16 sm:px-8 sm:py-24">
-      {/* vibrant header backdrop: gradient blobs + dotted pattern */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[560px] overflow-hidden"
-      >
-        <div className="absolute -left-24 -top-20 h-80 w-80 rounded-full bg-accent-wash blur-3xl" />
-        <div className="absolute right-0 -top-10 h-72 w-72 rounded-full bg-accent-2-wash blur-3xl" />
-        <div className="absolute left-1/3 top-44 h-64 w-64 rounded-full bg-accent-3-wash blur-3xl" />
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage:
-              "radial-gradient(circle, rgba(132,94,194,0.12) 1px, transparent 1px)",
-            backgroundSize: "22px 22px",
-            maskImage: "linear-gradient(to bottom, black, transparent)",
-            WebkitMaskImage: "linear-gradient(to bottom, black, transparent)",
-          }}
-        />
-      </div>
+      <HeaderBackdrop />
 
       <Link
         href="/#work"
@@ -158,22 +111,7 @@ export default function ArbFlowCaseStudy() {
           running in production.
         </p>
 
-        {/* colourful tech pills */}
-        <div className="mt-7 flex flex-wrap gap-2.5">
-          {STACK_PILLS.map((p, i) => (
-            <span
-              key={p.label}
-              className="rounded-full px-3.5 py-1.5 font-mono text-[12px] font-medium shadow-sm"
-              style={{
-                background: p.wash,
-                color: p.color,
-                transform: i % 2 === 0 ? "rotate(-1.5deg)" : "rotate(1.5deg)",
-              }}
-            >
-              {p.label}
-            </span>
-          ))}
-        </div>
+        <StackPills pills={STACK_PILLS} />
       </div>
 
       {/* At a glance */}
@@ -231,27 +169,7 @@ export default function ArbFlowCaseStudy() {
           Multi-tenancy is the whole product, so isolation is a first-class
           concern rather than an afterthought. The decisions that mattered:
         </p>
-        <ul className="mt-6 grid max-w-3xl gap-3 sm:grid-cols-2">
-          {SECURITY.map((s, i) => (
-            <li
-              key={s}
-              className="flex gap-3 rounded-xl border p-4 text-[15px] leading-relaxed text-ink"
-              style={{
-                background: WASHES[i % WASHES.length],
-                borderColor: PALETTE[i % PALETTE.length] + "33",
-              }}
-            >
-              <span
-                className="mt-0.5 shrink-0"
-                style={{ color: PALETTE[i % PALETTE.length] }}
-                aria-hidden
-              >
-                ∿
-              </span>
-              <span>{s}</span>
-            </li>
-          ))}
-        </ul>
+        <PointList points={SECURITY} />
       </section>
 
       {/* Status */}
@@ -264,7 +182,7 @@ export default function ArbFlowCaseStudy() {
       </section>
 
       <div className="mt-12 flex flex-wrap items-center gap-3">
-        <Button href="https://marketing-saas-platform-pi.vercel.app/">
+        <Button href="https://arbflow.pranavmshukla.in">
           Visit live demo →
         </Button>
         <Button href="mailto:pranavmshukla@gmail.com" variant="outline">
