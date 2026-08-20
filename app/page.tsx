@@ -88,16 +88,21 @@ export default function Home() {
 
       {/* ── Selected work ── */}
       <Section id="work" eyebrow="Selected work">
-        {/* Shipped · in production — the one real production system, front and centre */}
+        {/* Shipped · in production — the two that are live and reachable today */}
         <div className="mb-5 flex items-center gap-2.5">
           <PulseDot />
           <h3 className="font-mono text-[11px] uppercase tracking-[0.14em] text-ink-2">
             Shipped · in production
           </h3>
         </div>
-        <Reveal>
-          <ProjectCard project={PROJECTS_BY_ID["arbflow"]} />
-        </Reveal>
+        <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+          <Reveal>
+            <ProjectCard project={PROJECTS_BY_ID["arbflow"]} />
+          </Reveal>
+          <Reveal delay={0.05}>
+            <ProjectCard project={PROJECTS_BY_ID["kleene"]} />
+          </Reveal>
+        </div>
 
         {/* Research & projects — built, but not deployed to users */}
         <div className="mb-5 mt-14 flex items-center gap-2.5">
@@ -106,15 +111,12 @@ export default function Home() {
             Research &amp; projects
           </h3>
         </div>
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
           <Reveal>
-            <ProjectCard project={PROJECTS_BY_ID["mlops"]} />
+            <ProjectCard project={PROJECTS_BY_ID["cnams"]} />
           </Reveal>
           <Reveal delay={0.05}>
             <ProjectCard project={PROJECTS_BY_ID["sleep-apnea"]} />
-          </Reveal>
-          <Reveal delay={0.1}>
-            <ProjectCard project={PROJECTS_BY_ID["pre-eclampsia"]} />
           </Reveal>
         </div>
       </Section>
