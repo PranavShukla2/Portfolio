@@ -3,7 +3,14 @@ import { SITE_URL, SORTED_POSTS } from "@/lib/posts";
 
 /** Generated at build → served at /sitemap.xml. Submit this URL in Search Console. */
 export default function sitemap(): MetadataRoute.Sitemap {
-  const staticRoutes = ["", "/blog", "/chess", "/work/arbflow"].map((path) => ({
+  const staticRoutes = [
+    "",
+    "/blog",
+    "/chess",
+    "/work/arbflow",
+    "/work/kleene",
+    "/work/cnams",
+  ].map((path) => ({
     url: `${SITE_URL}${path}`,
     lastModified: new Date(),
     changeFrequency: "monthly" as const,
