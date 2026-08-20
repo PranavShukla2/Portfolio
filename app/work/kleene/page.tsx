@@ -95,7 +95,7 @@ export default function KleeneCaseStudy() {
           className="pointer-events-none absolute right-24 top-28 hidden -rotate-3 rounded-full px-3 py-1.5 font-mono text-[12px] font-medium shadow-md lg:inline-block"
           style={{ background: "rgba(132,94,194,0.16)", color: "#845ec2" }}
         >
-          ⚙ rust → wasm
+          🦀 rust → wasm
         </span>
 
         <div className="flex flex-wrap items-center gap-3">

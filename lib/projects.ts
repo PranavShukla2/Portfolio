@@ -60,7 +60,7 @@ export const PROJECTS: ProjectData[] = [
     description:
       "A 1D CNN that detects apnea events from polysomnography signals, validated with leave-one-participant-out cross-validation so results hold on unseen participants.",
     chips: ["TensorFlow", "1D CNN", "SciPy", "LOPO CV"],
-    badge: { label: "Research · paper in progress", variant: "muted" },
+    badge: { label: "Research · in progress", variant: "muted" },
     callout:
       "Apnea events are rare, so accuracy is the wrong yardstick — a model can score 91% by mostly predicting 'normal' and still miss the events that matter. Re-centering evaluation on recall and PR-AUC, with SMOTE applied strictly inside each training fold, lifted minority-class F1 by 18 points. Catching that gap and rebuilding the evaluation around it is the core of the paper I'm writing.",
   },
