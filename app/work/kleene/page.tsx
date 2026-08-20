@@ -21,7 +21,7 @@ const STACK_PILLS = [
   { label: "WebAssembly", color: "#845ec2", wash: "rgba(132,94,194,0.13)" },
   { label: "React", color: "#ff4e9b", wash: "rgba(255,78,155,0.12)" },
   { label: "TypeScript", color: "#d98324", wash: "rgba(255,179,71,0.18)" },
-  { label: "Vite", color: "#5a5a5f", wash: "rgba(90,90,95,0.08)" },
+  { label: "Vite", color: "var(--ink-3)", wash: "var(--line)" },
 ];
 
 const AT_A_GLANCE = [
