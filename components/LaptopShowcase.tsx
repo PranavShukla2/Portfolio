@@ -156,6 +156,8 @@ export default function LaptopShowcase() {
 
   const inputRef = useRef<HTMLInputElement>(null);
   const laptopRef = useRef<HTMLDivElement>(null);
+  // a ?play= link should fire once, not again on every re-subscribe
+  const launchedRef = useRef(false);
   const screenRef = useRef<HTMLDivElement>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
 
@@ -561,6 +563,40 @@ export default function LaptopShowcase() {
       }
     }
   };
+
+  /**
+   * The nav's Play menu launches games here rather than reimplementing them:
+   * it either dispatches an event (already on this page) or arrives with
+   * ?play=<command> after navigating from elsewhere.
+   */
+  useEffect(() => {
+    const launch = (cmd: string) => {
+      setMinimized(false);
+      setView("cli");
+      laptopRef.current?.scrollIntoView({
+        behavior: reduce ? "auto" : "smooth",
+        block: "center",
+      });
+      window.setTimeout(() => run(cmd), 80);
+    };
+
+    const onPlay = (event: Event) => launch((event as CustomEvent<string>).detail);
+    window.addEventListener("pranavos:play", onPlay);
+
+    if (!launchedRef.current) {
+      const requested = new URLSearchParams(window.location.search).get("play");
+      if (requested) {
+        launchedRef.current = true;
+        // clear the param so a refresh does not relaunch the game
+        const url = new URL(window.location.href);
+        url.searchParams.delete("play");
+        window.history.replaceState({}, "", `${url.pathname}${url.search}${url.hash}`);
+        window.setTimeout(() => launch(requested), 350);
+      }
+    }
+
+    return () => window.removeEventListener("pranavos:play", onPlay);
+  }, [run, reduce]);
 
   const lineColor: Record<Exclude<LineKind, "cmd" | "list" | "neofetch" | "stats" | "emu" | "matrix" | "me" | "whoami" | "snake" | "tetris" | "2048" | "type" | "doom">, string> =
     useMemo(
