@@ -475,3 +475,33 @@
     animation: none !important;
   }
 }
+
+/* A wrong move on the chess board shakes it — the message alone is missable. */
+@keyframes board-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-7px);
+  }
+  40% {
+    transform: translateX(7px);
+  }
+  60% {
+    transform: translateX(-4px);
+  }
+  80% {
+    transform: translateX(4px);
+  }
+}
+
+.animate-board-shake {
+  animation: board-shake 0.4s ease-in-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-board-shake {
+    animation: none;
+  }
+}
