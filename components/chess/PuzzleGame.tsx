@@ -41,6 +41,8 @@ export default function PuzzleGame() {
   const [played, setPlayed] = useState(0);
   const [hint, setHint] = useState<Square | null>(null);
   const [history, setHistory] = useState<string[]>([]);
+  // bumped on every wrong move so the shake animation replays
+  const [shake, setShake] = useState(0);
 
   const load = useCallback((next: number) => {
     if (timerRef.current) window.clearTimeout(timerRef.current);
@@ -108,6 +110,7 @@ export default function PuzzleGame() {
 
     if (!stillMating) {
       setStatus("wrong");
+      setShake((n) => n + 1);
       return;
     }
 
@@ -181,16 +184,57 @@ export default function PuzzleGame() {
   return (
     <div className="grid gap-8 lg:grid-cols-[minmax(0,520px)_minmax(220px,300px)] lg:items-start">
       <div className="mx-auto w-full max-w-[520px]">
-        <Board
-          grid={grid}
-          orientation={solverSide}
-          selected={selected}
-          targets={targets}
-          lastMove={lastMove}
-          checkOn={checkOn}
-          frozen={status !== "play"}
-          onPick={pick}
-        />
+        <div
+          key={shake}
+          className={`relative ${status === "wrong" ? "animate-board-shake" : ""}`}
+        >
+          <Board
+            grid={grid}
+            orientation={solverSide}
+            selected={selected}
+            targets={targets}
+            lastMove={lastMove}
+            checkOn={checkOn}
+            frozen={status !== "play"}
+            onPick={pick}
+          />
+
+          {/* the verdict, on the board itself — a line of text in the sidebar
+              is far too easy to miss */}
+          {(status === "wrong" || status === "solved") && (
+            <div className="absolute inset-0 flex items-center justify-center rounded-2xl bg-bg/70 backdrop-blur-[2px]">
+              <div
+                className={`mx-6 rounded-2xl border-2 bg-surface px-6 py-5 text-center shadow-[0_24px_60px_-20px_rgba(132,94,194,0.55)] ${
+                  status === "wrong" ? "border-coral" : "border-accent"
+                }`}
+              >
+                <p
+                  className={`text-[20px] font-semibold tracking-tightest ${
+                    status === "wrong" ? "text-coral" : "text-accent"
+                  }`}
+                >
+                  {status === "wrong" ? "Wrong move" : "Checkmate!"}
+                </p>
+                <p className="mt-1.5 text-[14px] leading-relaxed text-ink-2">
+                  {status === "wrong"
+                    ? "That one lets the king escape."
+                    : "Clean contact."}
+                </p>
+                <button
+                  type="button"
+                  onClick={
+                    status === "wrong"
+                      ? takeBack
+                      : () => load((index + 1) % PUZZLES.length)
+                  }
+                  className="mt-4 rounded-full bg-accent px-5 py-2 font-mono text-[12px] uppercase tracking-[0.1em] text-white transition-transform hover:-translate-y-0.5 motion-reduce:hover:translate-y-0"
+                >
+                  {status === "wrong" ? "Take it back" : "Next puzzle"}
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
 
         {hint && status === "play" && (
           <p className="sr-only" role="status">
