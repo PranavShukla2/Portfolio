@@ -796,7 +796,10 @@ export default function LaptopShowcase() {
                   {view === "cli" && (
                     <div
                       ref={bodyRef}
-                      onClick={() => inputRef.current?.focus({ preventScroll: true })}
+                      onClick={(e) => {
+                        if ((e.target as HTMLElement).closest("[data-keyboard-owner]")) return;
+                        inputRef.current?.focus({ preventScroll: true });
+                      }}
                       className={`flex-1 overflow-y-auto no-scrollbar px-4 py-4 text-[13px] leading-relaxed transition-all duration-200 sm:text-[14px] ${activeFont} ${activeTheme.text}`}
                     >
                       <p className="text-[#b9cbe0]">
@@ -1251,8 +1254,23 @@ function SnakeGame({ onExit }: { onExit?: () => void }) {
     return () => clearInterval(interval);
   }, [moveSnake]);
 
-  // Keyboard navigation
+  const boardRef = useRef<HTMLDivElement>(null);
+  const [hasFocus, setHasFocus] = useState(true);
+
+  // Take the keyboard when the game appears, so WASD reaches the snake.
   useEffect(() => {
+    boardRef.current?.focus({ preventScroll: true });
+  }, []);
+
+  /**
+   * Bound to the board rather than to window: a finished game stays mounted in
+   * the scrollback, and a window listener would go on swallowing every w/a/s/d
+   * the prompt ever received again.
+   */
+  useEffect(() => {
+    const board = boardRef.current;
+    if (!board) return;
+
     const handleKey = (e: KeyboardEvent) => {
       const k = e.key.toLowerCase();
       if (k === "arrowup" || k === "w") {
@@ -1280,8 +1298,8 @@ function SnakeGame({ onExit }: { onExit?: () => void }) {
         setGameOver(false);
       }
     };
-    window.addEventListener("keydown", handleKey);
-    return () => window.removeEventListener("keydown", handleKey);
+    board.addEventListener("keydown", handleKey);
+    return () => board.removeEventListener("keydown", handleKey);
   }, [gameOver]);
 
   const restartGame = () => {
@@ -1297,7 +1315,16 @@ function SnakeGame({ onExit }: { onExit?: () => void }) {
   };
 
   return (
-    <div className="my-2 rounded-lg border border-[#28c840]/40 bg-[#0a120c] p-3.5 font-mono text-[12px] select-none text-[#28c840]">
+    <div
+      ref={boardRef}
+      tabIndex={0}
+      data-keyboard-owner
+      onFocus={() => setHasFocus(true)}
+      onBlur={() => setHasFocus(false)}
+      className={`my-2 rounded-lg border bg-[#0a120c] p-3.5 font-mono text-[12px] select-none text-[#28c840] outline-none transition-colors ${
+        hasFocus ? "border-[#28c840]" : "border-[#28c840]/30"
+      }`}
+    >
       {/* Game Header */}
       <div className="flex flex-wrap items-center justify-between border-b border-[#28c840]/30 pb-2 text-[11px]">
         <span className="font-bold text-[#a2f0b0]">🐍 PRANAV_WASM_SNAKE v1.0</span>
@@ -1363,7 +1390,16 @@ function SnakeGame({ onExit }: { onExit?: () => void }) {
           </div>
         ) : (
           <span className="text-[#8c7ba0]">
-            Controls: <code className="text-[#a2f0b0]">WASD</code> or <code className="text-[#a2f0b0]">Arrows</code> · <code className="text-[#a2f0b0]">Space</code> pause
+            {hasFocus ? (
+              <>
+                Controls: <code className="text-[#a2f0b0]">WASD</code> or{" "}
+                <code className="text-[#a2f0b0]">Arrows</code> ·{" "}
+                <code className="text-[#a2f0b0]">Space</code> pause · click the
+                prompt to type again
+              </>
+            ) : (
+              <>Click the board to play</>
+            )}
           </span>
         )}
 
