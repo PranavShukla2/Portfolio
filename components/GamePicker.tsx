@@ -92,7 +92,8 @@ export default function GamePicker() {
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
         aria-haspopup="menu"
-        className="group inline-flex items-center gap-2 rounded-full border border-accent-2/40 bg-accent-2-wash px-3.5 py-1.5 font-mono text-[12px] uppercase tracking-[0.1em] text-accent-2 transition-all hover:-translate-y-0.5 hover:border-accent-2 motion-reduce:hover:translate-y-0"
+        aria-label="Play a game"
+        className="group inline-flex items-center gap-2 rounded-full border border-accent-2/40 bg-accent-2-wash px-2.5 py-1.5 font-mono text-[12px] uppercase tracking-[0.1em] text-accent-2 transition-all hover:-translate-y-0.5 hover:border-accent-2 motion-reduce:hover:translate-y-0 sm:px-3.5"
       >
         <motion.span
           aria-hidden
@@ -101,7 +102,7 @@ export default function GamePicker() {
         >
           🕹
         </motion.span>
-        Play
+        <span className="hidden sm:inline">Play</span>
       </button>
 
       <AnimatePresence>
@@ -112,10 +113,10 @@ export default function GamePicker() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -8, scale: reduce ? 1 : 0.96 }}
             transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
-            className="absolute right-0 z-50 mt-2 w-[290px] origin-top-right overflow-hidden rounded-2xl border border-line bg-surface p-2 shadow-[0_28px_70px_-24px_rgba(132,94,194,0.5)]"
+            className="fixed inset-x-4 top-[62px] z-50 origin-top overflow-hidden rounded-2xl border border-line bg-surface p-2 shadow-[0_28px_70px_-24px_rgba(132,94,194,0.5)] sm:absolute sm:inset-x-auto sm:right-0 sm:top-auto sm:mt-2 sm:w-[290px] sm:origin-top-right"
           >
             <p className="px-3 py-2 font-mono text-[10px] uppercase tracking-[0.14em] text-ink-3">
-              Pick one — it opens in the terminal
+              Pick one
             </p>
 
             {GAMES.map((game, i) => {
