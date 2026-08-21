@@ -99,6 +99,7 @@ export default function SnakeGame() {
     <GameShell
       title="🐍 PRANAV_WASM_SNAKE v1.0"
       accent="#28c840"
+      objective={"eat the ★ to grow one square longer. The walls wrap around — your own tail does not."}
       onKey={onKey}
       status={
         <>

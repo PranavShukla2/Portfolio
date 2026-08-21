@@ -136,6 +136,7 @@ export default function Game2048() {
     <GameShell
       title="🔢 PRANAV_WASM_2048 v1.0"
       accent="#ffb347"
+      objective={"every slide pushes all tiles one way; equal tiles merge into their sum. Get one to 2048."}
       onKey={onKey}
       status={
         <>

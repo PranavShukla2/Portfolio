@@ -14,6 +14,7 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 export default function GameShell({
   title,
   status,
+  objective,
   controls,
   accent = "#28c840",
   actions = [],
@@ -24,6 +25,8 @@ export default function GameShell({
   title: string;
   /** Score, level — whatever belongs on the right of the title bar. */
   status?: ReactNode;
+  /** One line on what you are trying to do — shown the whole time. */
+  objective: ReactNode;
   /** Shown once the game has focus; replaced by a nudge when it does not. */
   controls: ReactNode;
   accent?: string;
@@ -73,6 +76,10 @@ export default function GameShell({
         <span className="font-bold">{title}</span>
         {status && <div className="flex items-center gap-3">{status}</div>}
       </div>
+
+      <p className="mt-2 text-[11px] leading-relaxed text-[#7b93ad]">
+        <span style={{ color: accent }}>Goal</span> — {objective}
+      </p>
 
       <div className="my-3 flex justify-center overflow-x-auto">{children}</div>
 

@@ -86,6 +86,7 @@ export default function TypingTest() {
       title="⌨ PRANAV_WASM_TYPETEST v1.0"
       accent="#a982e6"
       showPad={false}
+      objective={"type the line exactly as written. The clock starts on your first keystroke and scores you in words per minute."}
       onKey={onKey}
       status={
         <>

@@ -236,6 +236,7 @@ export default function TetrisGame() {
       title="🧱 PRANAV_WASM_TETRIS v1.0"
       accent="#38bdf8"
       actions={[{ label: "⤓", key: " " }]}
+      objective={"fill a row all the way across and it clears. Miss too often and the stack reaches the top."}
       onKey={onKey}
       status={
         <>
