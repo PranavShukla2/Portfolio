@@ -68,7 +68,7 @@ export default function DoomPlayer({ onExit, onReady, onProgress }: DoomPlayerPr
         src={iframeSrc}
         title="DOOM WebAssembly Player"
         className={`h-full w-full border-0 transition-opacity duration-300 ${isGraphicsReady ? "opacity-100" : "opacity-0"}`}
-        allow="autoplay; fullscreen; gamepad"
+        allow="autoplay; fullscreen; gamepad; pointer-lock"
         onLoad={() => {
           iframeRef.current?.focus();
           iframeRef.current?.contentWindow?.focus();
