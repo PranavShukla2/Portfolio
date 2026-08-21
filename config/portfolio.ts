@@ -46,7 +46,7 @@ export const PORTFOLIO_CONFIG = {
         command: "experience",
         description: "Show work history",
         output:
-          "Data Analyst · Com1 Communication Technologies (Aug 2026 – Feb 2027)\n  UK housing-data platform covering 2,500+ housing organisations — SQL against the\n  production warehouse, plus Python data-quality checks that flag ingestion anomalies\n  before the data reaches published reports.\n\nData Analytics Intern · DigitalPlus24x7 (Nov 2025 – May 2026)\n  Cut report-generation time 35% by replacing manual ETL with scheduled Python and\n  tuned SQL; 40% faster dashboards across 5+ live campaigns; Looker Studio surface\n  tracking 10+ KPIs for marketing leadership.",
+          "Data Analyst · Com1 Communication Technologies (Aug 2026 – Feb 2027) · current\n  UK housing-data platform covering 2,500+ housing organisations — SQL against the\n  production warehouse, plus Python data-quality checks that flag ingestion anomalies\n  before the data reaches published reports.\n\nData Analyst · DigitalPlus24x7 (Nov 2025 – May 2026) · completed\n  Cut report-generation time 35% by replacing manual ETL with scheduled Python and\n  tuned SQL; 40% faster dashboards across 5+ live campaigns; Looker Studio surface\n  tracking 10+ KPIs for marketing leadership.",
       },
       {
         command: "education",

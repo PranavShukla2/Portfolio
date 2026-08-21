@@ -92,8 +92,13 @@ const STACK = [
 
 const FACTS = [
   { key: "FOCUS", value: "Applied ML · Full-stack", color: "#ff6b6b" },
-  { key: "CURRENTLY", value: "Building Kleene & ArbFlow", color: "#ff4e9b" },
-  { key: "EXPERIENCE", value: "Data Analyst @ Com1", color: "#e2563b" },
+  { key: "BUILDING", value: "Kleene & ArbFlow", color: "#ff4e9b" },
+  { key: "CURRENT", value: "Data Analyst @ Com1", color: "#e2563b" },
+  {
+    key: "COMPLETED",
+    value: "Data Analyst @ DigitalPlus24x7",
+    color: "#845ec2",
+  },
   { key: "RESEARCH", value: "Sleep apnea (writing up)", color: "#845ec2" },
   { key: "LOOKING FOR", value: "SWE internship · startups", color: "#e2563b" },
   { key: "BASED", value: "India · remote-friendly", color: "#d98324" },
