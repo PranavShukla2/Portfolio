@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>DOOM (1993) - WebAssembly Edition</title>
+  <!--
+    js-dos v6.22.60 — loaded from CDN so the exact matching wdosbox.wasm.js
+    is always served. IndexedDB cache is keyed on the build version string,
+    so CDN + local wasm binary stay in sync.
+  -->
+  <script src="https://cdn.jsdelivr.net/npm/js-dos@6.22.60/dist/js-dos.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body, html {
+      width: 100%;
+      height: 100%;
+      background: #000;
+      color: #ff4e9b;
+      font-family: monospace;
+      overflow: hidden;
+    }
+    #dos, .dosbox-container, canvas, body, html {
+      outline: none !important;
+      border: none !important;
+      -webkit-tap-highlight-color: transparent;
+    }
+    #dos {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      outline: none !important;
+    }
+    .dosbox-container {
+      width: 100% !important;
+      height: 100% !important;
+      border: none !important;
+      outline: none !important;
+    }
+    canvas {
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: contain;
+      background: #000;
+      outline: none !important;
+      border: none !important;
+    }
+  </style>
+</head>
+<body style="background: #000;">
+  <canvas id="dos" tabindex="1"></canvas>
+
+  <script>
+    /*
+     * Override Emscripten's locateFile to load wasm files relative to the current html directory.
+     * This works seamlessly on localhost and GitHub Pages (/aboutme/).
+     */
+    window.Module = {
+      locateFile: function(path) {
+        return './' + path;
+      }
+    };
+
+    // Cache-bust version to force fresh WASM binary download (bypasses IndexedDB stale cache)
+    var CB = "?v=20260819";
+
+    var canvas = document.getElementById("dos");
+    
+    // Ensure canvas stays focused for keyboard control
+    function focusCanvas() {
+      if (canvas) {
+        canvas.focus();
+      }
+    }
+    window.addEventListener("click", focusCanvas);
+    window.addEventListener("keydown", function(e) {
+      // Prevent page scrolling when using arrow keys / space in the game
+      if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Space", " "].indexOf(e.key) >= 0) {
+        e.preventDefault();
+      }
+    });
+
+    var isGameStarted = false;
+
+    Dos(canvas, {
+      wdosboxUrl: "./wdosbox.js" + CB,
+      cycles: "max",
+      autolock: true,
+      log: function(msg) {
+        console.log("[DOOM Core]", msg);
+      },
+      onprogress: function(stage, total, loaded) {
+        var pct = total > 0 ? Math.min(100, Math.round((loaded / total) * 100)) : 0;
+        window.parent.postMessage({
+          type: "DOOM_PROGRESS",
+          stage: stage || "Downloading engine & WAD...",
+          loaded: loaded,
+          total: total,
+          percent: pct
+        }, "*");
+      }
+    }).ready(function(fs, main) {
+      window.parent.postMessage({
+        type: "DOOM_PROGRESS",
+        stage: "Extracting DOOM.WAD package...",
+        loaded: 100,
+        total: 100,
+        percent: 100
+      }, "*");
+      fs.extract("./doom.jsdos" + CB).then(function() {
+        main(["-c", "DOOM.EXE"]).then(function(ci) {
+          focusCanvas();
+          if (ci && ci.simulateKeyPress) {
+            setTimeout(function() {
+              ci.simulateKeyPress(13);
+              focusCanvas();
+            }, 100);
+          }
+
+          var graphicsReadySent = false;
+          function notifyGraphicsReady(source) {
+            if (!graphicsReadySent) {
+              graphicsReadySent = true;
+              console.log("[DOOM Core] 🎮 DOOM VGA Graphics active! (Reason: " + source + ", Canvas: " + canvas.width + "x" + canvas.height + "). Emitting DOOM_GRAPHICS_READY.");
+              window.parent.postMessage({ type: "DOOM_GRAPHICS_READY" }, "*");
+              focusCanvas();
+              isGameStarted = true;
+            }
+          }
+
+          // Buffer stdout chunks to reliably detect exit prompts and graphics initialization
+          var stdoutBuffer = "";
+          if (ci && typeof ci.listenStdout === "function") {
+            ci.listenStdout(function(text) {
+              if (text) {
+                stdoutBuffer += text;
+                if (stdoutBuffer.length > 2000) {
+                  stdoutBuffer = stdoutBuffer.slice(-1000);
+                }
+                
+                // DOOM prints 'HU_Init' / 'ST_Init' / 'P_Init: Init Playloop state' when starting the visual game
+                if (!graphicsReadySent && (
+                  stdoutBuffer.indexOf("ST_Init") >= 0 ||
+                  stdoutBuffer.indexOf("HU_Init") >= 0 ||
+                  stdoutBuffer.indexOf("Init Playloop") >= 0 ||
+                  stdoutBuffer.indexOf("S_Init: Setting up sound") >= 0
+                )) {
+                  setTimeout(function() {
+                    notifyGraphicsReady("playloop_stdout");
+                  }, 200);
+                }
+
+                if (isGameStarted) {
+                  var lower = stdoutBuffer.toLowerCase();
+                  if (
+                    lower.indexOf("c:\\>") >= 0 ||
+                    lower.indexOf("c:/>") >= 0 ||
+                    lower.indexOf("exiting doom") >= 0 ||
+                    lower.indexOf("z_free") >= 0 ||
+                    lower.indexOf("dosbox-jsdos") >= 0
+                  ) {
+                    console.log("[DOOM Core] In-game quit detected via buffered stdout! Sending DOOM_EXIT...");
+                    window.parent.postMessage({ type: "DOOM_EXIT", reason: "in_game_quit" }, "*");
+                  }
+                }
+              }
+            });
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
