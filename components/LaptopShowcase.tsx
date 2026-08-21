@@ -76,6 +76,7 @@ const BASE_COMMANDS = [
   "history",
   "history clear",
   "help theme",
+  "help games",
   "help font",
   "help open",
   "help skills",
@@ -488,6 +489,11 @@ export default function LaptopShowcase() {
           next.push({ kind: "out", text: "font [mono|pixel|hacker|sans|list] — change terminal font style" });
         } else if (topic === "open") {
           next.push({ kind: "out", text: "open <project-id> (e.g. `open arbflow`) or `open --live <project-id>`" });
+        } else if (topic === "games" || topic === "arcade") {
+          next.push({
+            kind: "out",
+            text: "tetris — ←→ move · ↑ rotate · ↓ soft drop · Space hard drop · P pause\n2048   — arrows or WASD to slide · R restart\nsnake  — WASD or arrows · Space pause · R restart\ntype   — a WPM test; just type · Esc for a new line\ndoom   — the 1993 original on WebAssembly\n(Each game takes the keyboard while it has focus. Click the prompt to type again.)",
+          });
         } else if (topic === "skills") {
           next.push({ kind: "out", text: "skills [lang|web|ml|infra] — view full or filtered skillset matrix" });
         } else {
@@ -848,7 +854,7 @@ export default function LaptopShowcase() {
                         {PORTFOLIO_CONFIG.terminal.osVersion} · {PROJECTS.length} things I&apos;ve built.
                       </p>
                       <p className="mt-1 text-[#5f7590]">
-                        # Quick commands: <code className="text-accent-bright">ls</code> · <code className="text-accent-bright">neofetch</code> · <code className="text-accent-bright">stats</code> · <code className="text-accent-bright">kleene</code>
+                        # Quick commands: <code className="text-accent-bright">ls</code> · <code className="text-accent-bright">neofetch</code> · <code className="text-accent-bright">stats</code> · games: <code className="text-accent-bright">tetris</code> · <code className="text-accent-bright">2048</code> · <code className="text-accent-bright">snake</code> · <code className="text-accent-bright">type</code>
                       </p>
 
                       {/* Interactive suggestion pills */}
