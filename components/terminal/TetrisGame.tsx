@@ -274,15 +274,15 @@ export default function TetrisGame() {
         <div
           className="grid gap-[2px] rounded-md border border-[#38bdf8]/30 bg-black/90 p-2"
           style={{
-            gridTemplateColumns: `repeat(${COLS}, 16px)`,
-            gridTemplateRows: `repeat(${ROWS}, 16px)`,
+            gridTemplateColumns: `repeat(${COLS}, 14px)`,
+            gridTemplateRows: `repeat(${ROWS}, 14px)`,
           }}
         >
           {view.map((row, y) =>
             row.map((cell, x) => (
               <div
                 key={`${x}-${y}`}
-                className="h-[16px] w-[16px] rounded-[3px]"
+                className="h-[14px] w-[14px] rounded-[3px]"
                 style={{ background: cell ?? "#0d1522" }}
               />
             ))
