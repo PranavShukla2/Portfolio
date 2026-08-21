@@ -36,7 +36,9 @@ export default function ChessPage() {
           {PUZZLES.length} positions, each one mate in a couple of moves. There is
           no engine here — a small solver checks whether the move you played still
           forces mate, then answers with the most stubborn defence it can find. So
-          the only way through is the real one.
+          the only way through is the real one. Prefer to work out both sides? Turn
+          on <span className="font-medium text-ink">play both sides</span> and
+          answer for the defender yourself.
         </p>
       </header>
 
