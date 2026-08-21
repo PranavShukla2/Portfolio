@@ -797,13 +797,13 @@ export default function LaptopShowcase() {
                     <div
                       ref={bodyRef}
                       onClick={() => inputRef.current?.focus({ preventScroll: true })}
-                      className={`flex-1 overflow-y-auto no-scrollbar px-4 py-4 text-[13px] leading-relaxed transition-all duration-200 sm:text-[14px] ${activeFont}`}
+                      className={`flex-1 overflow-y-auto no-scrollbar px-4 py-4 text-[13px] leading-relaxed transition-all duration-200 sm:text-[14px] ${activeFont} ${activeTheme.text}`}
                     >
                       <p className="text-[#b9cbe0]">
                         {PORTFOLIO_CONFIG.terminal.osVersion} · {PROJECTS.length} things I&apos;ve built.
                       </p>
                       <p className="mt-1 text-[#5f7590]">
-                        # Quick commands: <code className="text-accent-bright">ls</code> · <code className="text-accent-bright">neofetch</code> · <code className="text-accent-bright">stats</code> · <code className="text-accent-bright">emu</code>
+                        # Quick commands: <code className="text-accent-bright">ls</code> · <code className="text-accent-bright">neofetch</code> · <code className="text-accent-bright">stats</code> · <code className="text-accent-bright">kleene</code>
                       </p>
 
                       {/* Interactive suggestion pills */}
@@ -1004,7 +1004,7 @@ function NeofetchOutput() {
       <pre className="font-mono text-[10px] leading-tight text-accent select-none">
 {n.asciiArt}
       </pre>
-      <div className="space-y-0.5 font-mono text-[12px]">
+      <div className="space-y-0.5 font-mono text-[12px] text-[#e7f0f9]">
         <p className="font-bold text-accent-bright">{PORTFOLIO_CONFIG.githubUsername}@portfolio</p>
         <p className="text-[#5f7590]">-----------------------</p>
         <p><span className="text-[#2563eb]">OS:</span> {n.os}</p>
@@ -1173,7 +1173,7 @@ function WhoamiOutput() {
       <div className="mt-3 flex flex-wrap items-center gap-3 border-t border-term-line/60 pt-2 text-[11px] text-[#96abc4]">
         <span>Location: India</span>
         <span>•</span>
-        <span>Focus: Emulators, WASM, Firmware &amp; Full-Stack Toolchains</span>
+        <span>Focus: {PORTFOLIO_CONFIG.terminal.neofetch.focus}</span>
       </div>
     </div>
   );
