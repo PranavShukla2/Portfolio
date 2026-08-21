@@ -43,6 +43,8 @@ export default function PuzzleGame() {
   const [history, setHistory] = useState<string[]>([]);
   // bumped on every wrong move so the shake animation replays
   const [shake, setShake] = useState(0);
+  // when on, you answer for the defender yourself instead of the solver doing it
+  const [playBoth, setPlayBoth] = useState(false);
 
   const load = useCallback((next: number) => {
     if (timerRef.current) window.clearTimeout(timerRef.current);
@@ -85,6 +87,7 @@ export default function PuzzleGame() {
   }, [fen]);
 
   const play = (from: Square, to: Square) => {
+    const defending = game.turn() !== solverSide;
     const move = game.move({ from, to, promotion: "q" });
     if (!move) return;
 
@@ -96,6 +99,12 @@ export default function PuzzleGame() {
 
     if (game.isCheckmate()) {
       setStatus("solved");
+      return;
+    }
+
+    // the defender's move is yours to choose in this mode — it is never judged
+    if (defending) {
+      setStatus("play");
       return;
     }
 
@@ -115,6 +124,13 @@ export default function PuzzleGame() {
     }
 
     setPlayed((prev) => prev + 1);
+
+    if (playBoth) {
+      // hand the board back so you can answer for Black yourself
+      setStatus("play");
+      return;
+    }
+
     setStatus("thinking");
 
     timerRef.current = window.setTimeout(
@@ -159,6 +175,7 @@ export default function PuzzleGame() {
   };
 
   const showHint = () => {
+    if (game.turn() !== solverSide) return;
     if (played === 0) {
       // the key move is known, so no search is needed for the first hint
       const probe = new Chess(game.fen());
@@ -172,10 +189,13 @@ export default function PuzzleGame() {
     setHint(found ? (found.from as Square) : null);
   };
 
+  const defendersTurn = game.turn() !== solverSide;
   const message = {
-    play: hint
-      ? `Try the piece on ${hint}.`
-      : `${solverSide === "w" ? "White" : "Black"} to play and mate in ${movesLeft}.`,
+    play: defendersTurn
+      ? `Your move for ${solverSide === "w" ? "Black" : "White"} — play any legal reply.`
+      : hint
+        ? `Try the piece on ${hint}.`
+        : `${solverSide === "w" ? "White" : "Black"} to play and mate in ${movesLeft}.`,
     thinking: "Black finds the toughest defence…",
     wrong: "That lets the king slip away. Take it back and try another move.",
     solved: "Checkmate. Clean contact.",
@@ -279,7 +299,7 @@ export default function PuzzleGame() {
             <button
               type="button"
               onClick={showHint}
-              disabled={status !== "play"}
+              disabled={status !== "play" || defendersTurn}
               className="rounded-full border border-line bg-surface px-4 py-2 font-mono text-[12px] uppercase tracking-[0.1em] text-ink-2 transition-colors hover:border-accent hover:text-accent disabled:opacity-40"
             >
               Hint
@@ -292,6 +312,23 @@ export default function PuzzleGame() {
             className="rounded-full border border-line bg-surface px-4 py-2 font-mono text-[12px] uppercase tracking-[0.1em] text-ink-2 transition-colors hover:border-accent hover:text-accent"
           >
             Reset
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              if (timerRef.current) window.clearTimeout(timerRef.current);
+              setPlayBoth((on) => !on);
+              if (status === "thinking") setStatus("play");
+            }}
+            aria-pressed={playBoth}
+            className={`rounded-full border px-4 py-2 font-mono text-[12px] uppercase tracking-[0.1em] transition-colors ${
+              playBoth
+                ? "border-accent bg-accent-wash text-accent"
+                : "border-line bg-surface text-ink-2 hover:border-accent hover:text-accent"
+            }`}
+          >
+            Play both sides {playBoth ? "· on" : "· off"}
           </button>
 
           <button
