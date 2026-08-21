@@ -145,6 +145,7 @@ export default function LaptopShowcase() {
 
   const inputRef = useRef<HTMLInputElement>(null);
   const laptopRef = useRef<HTMLDivElement>(null);
+  const screenRef = useRef<HTMLDivElement>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -174,6 +175,13 @@ export default function LaptopShowcase() {
 
   const minimizeWindow = useCallback(() => setMinimized(true), []);
   const restoreWindow = useCallback(() => setMinimized(false), []);
+
+  const goFullscreen = useCallback(() => {
+    const screen = screenRef.current;
+    if (!screen) return;
+    if (document.fullscreenElement) document.exitFullscreen();
+    else screen.requestFullscreen?.().catch(() => {});
+  }, []);
 
   const goto = useCallback(
     (id: string) => {
@@ -622,7 +630,10 @@ export default function LaptopShowcase() {
             </div>
 
             {/* display */}
-            <div className={`relative h-[440px] overflow-hidden rounded-[12px] transition-colors duration-300 ${activeTheme.bg} sm:h-[480px]`}>
+            <div
+              ref={screenRef}
+              className={`relative h-[440px] overflow-hidden rounded-[12px] transition-colors duration-300 ${activeTheme.bg} sm:h-[480px] [&:fullscreen]:h-screen [&:fullscreen]:rounded-none`}
+            >
               {showHome && (
                 <HomeScreen
                   onStart={() => {
@@ -681,6 +692,13 @@ export default function LaptopShowcase() {
                       <div className="flex items-center gap-2">
                         <button
                           type="button"
+                          onClick={goFullscreen}
+                          className="flex items-center gap-1 rounded border border-[#38ef7d]/50 bg-[#0c2417] px-2 py-0.5 text-[10px] font-bold text-[#38ef7d] transition-all hover:bg-[#38ef7d] hover:text-black"
+                        >
+                          <span>⤢ Fullscreen</span>
+                        </button>
+                        <button
+                          type="button"
                           onClick={() => setShowDoomHelp((prev) => !prev)}
                           className={`flex items-center gap-1 rounded border px-2 py-0.5 text-[10px] font-bold transition-all ${
                             showDoomHelp
@@ -693,6 +711,7 @@ export default function LaptopShowcase() {
                         <button
                           type="button"
                           onClick={() => {
+                            if (document.fullscreenElement) document.exitFullscreen();
                             setDoomPreload(false);
                             setView("cli");
                           }}
