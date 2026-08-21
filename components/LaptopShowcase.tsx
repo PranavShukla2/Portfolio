@@ -130,7 +130,12 @@ export default function LaptopShowcase() {
   useEffect(() => {
     if (doomPreload && doomReady) {
       setView("doom");
+      laptopRef.current?.scrollIntoView({
+        behavior: reduce ? "auto" : "smooth",
+        block: "center",
+      });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [doomPreload, doomReady]);
 
   // Command history buffer for Up / Down arrow navigation
@@ -139,6 +144,7 @@ export default function LaptopShowcase() {
   const sessionStartTimeRef = useRef<number>(Date.now());
 
   const inputRef = useRef<HTMLInputElement>(null);
+  const laptopRef = useRef<HTMLDivElement>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -602,6 +608,7 @@ export default function LaptopShowcase() {
         {/* ── MacBook ── */}
         <div className="mx-auto mt-12 max-w-[880px] [perspective:2000px]">
           <motion.div
+            ref={laptopRef}
             initial={{ rotateX: reduce ? 0 : -88, opacity: reduce ? 1 : 0.5 }}
             whileInView={{ rotateX: 0, opacity: 1 }}
             viewport={{ once: true, margin: "-120px" }}
