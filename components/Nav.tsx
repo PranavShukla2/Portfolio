@@ -2,6 +2,7 @@ import Link from "next/link";
 import PulseDot from "./PulseDot";
 import MobileMenu from "./MobileMenu";
 import ThemeToggle from "./ThemeToggle";
+import GamePicker from "./GamePicker";
 import { POSTS } from "@/lib/posts";
 
 const LINKS = [
@@ -9,7 +10,6 @@ const LINKS = [
   { href: "/#about", label: "About" },
   { href: "/#stack", label: "Stack" },
   { href: "/#contact", label: "Contact" },
-  { href: "/chess", label: "Chess" },
 ];
 
 export default function Nav() {
@@ -41,6 +41,8 @@ export default function Nav() {
               </li>
             ))}
           </ul>
+
+          <GamePicker />
 
           {/* Blog — highlighted, visible on every breakpoint */}
           <Link
