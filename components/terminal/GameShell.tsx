@@ -16,6 +16,8 @@ export default function GameShell({
   status,
   controls,
   accent = "#28c840",
+  actions = [],
+  showPad = true,
   onKey,
   children,
 }: {
@@ -25,6 +27,10 @@ export default function GameShell({
   /** Shown once the game has focus; replaced by a nudge when it does not. */
   controls: ReactNode;
   accent?: string;
+  /** Extra on-screen buttons for touch, beside the arrows (e.g. hard drop). */
+  actions?: { label: string; key: string }[];
+  /** Phones have no arrow keys — hide the pad for games that only need typing. */
+  showPad?: boolean;
   onKey: (key: string) => void;
   children: ReactNode;
 }) {
@@ -70,8 +76,30 @@ export default function GameShell({
 
       <div className="my-3 flex justify-center overflow-x-auto">{children}</div>
 
-      <div className="pt-1 text-[11px] text-[#8c7ba0]">
-        {hasFocus ? controls : <>Click the game to play</>}
+      <div className="flex flex-wrap items-center justify-between gap-2 pt-1 text-[11px] text-[#8c7ba0]">
+        <span>{hasFocus ? controls : <>Click the game to play</>}</span>
+
+        {/* touch devices have no arrow keys, so hand them the same moves */}
+        {showPad && (
+          <div className="flex items-center gap-1 sm:hidden">
+            {[
+              { label: "◀", key: "arrowleft" },
+              { label: "▲", key: "arrowup" },
+              { label: "▼", key: "arrowdown" },
+              { label: "▶", key: "arrowright" },
+              ...actions,
+            ].map((button) => (
+              <button
+                key={button.key + button.label}
+                type="button"
+                onClick={() => onKey(button.key)}
+                className="rounded bg-white/10 px-2 py-1 text-white active:bg-white/30"
+              >
+                {button.label}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

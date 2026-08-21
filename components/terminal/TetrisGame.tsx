@@ -235,6 +235,7 @@ export default function TetrisGame() {
     <GameShell
       title="🧱 PRANAV_WASM_TETRIS v1.0"
       accent="#38bdf8"
+      actions={[{ label: "⤓", key: " " }]}
       onKey={onKey}
       status={
         <>
