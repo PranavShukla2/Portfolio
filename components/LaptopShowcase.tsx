@@ -12,9 +12,10 @@ import Divider from "./Divider";
 import DoomPlayer from "./doom/DoomPlayer";
 import SnakeGame from "./terminal/SnakeGame";
 import TetrisGame from "./terminal/TetrisGame";
+import Game2048 from "./terminal/Game2048";
 
 type View = "home" | "cli" | "project" | "doom";
-type LineKind = "cmd" | "out" | "sys" | "err" | "list" | "neofetch" | "stats" | "emu" | "matrix" | "me" | "whoami" | "snake" | "tetris" | "doom";
+type LineKind = "cmd" | "out" | "sys" | "err" | "list" | "neofetch" | "stats" | "emu" | "matrix" | "me" | "whoami" | "snake" | "tetris" | "2048" | "doom";
 type TerminalTheme = "default" | "cyberpunk" | "matrix" | "nord";
 type TerminalFont = "mono" | "pixel" | "hacker" | "sans";
 
@@ -33,6 +34,7 @@ const BASE_COMMANDS = [
   "doom",
   "snake",
   "tetris",
+  "2048",
   "neofetch",
   "fastfetch",
   "stats",
@@ -99,6 +101,7 @@ const SUGGESTIONS = [
   { cmd: "ls", label: "ls" },
   { cmd: "snake", label: "🐍 snake" },
   { cmd: "tetris", label: "🧱 tetris" },
+  { cmd: "2048", label: "🔢 2048" },
   { cmd: "doom", label: "🎮 doom" },
   { cmd: "pranav", label: "pranav" },
   { cmd: "email", label: "email" },
@@ -360,6 +363,8 @@ export default function LaptopShowcase() {
         next.push({ kind: "snake" });
       } else if (cmd === "tetris" || cmd === "blocks") {
         next.push({ kind: "tetris" });
+      } else if (cmd === "2048" || cmd === "twenty48") {
+        next.push({ kind: "2048" });
       } else if (cmd === "matrix") {
         next.push({ kind: "matrix" });
       } else if (head === "theme") {
@@ -484,7 +489,7 @@ export default function LaptopShowcase() {
           const customCmdList = (PORTFOLIO_CONFIG.terminal.customCommands || []).map((c) => c.command).join(" · ");
           next.push({
             kind: "out",
-            text: `commands: ls · open <project> · doom · snake · tetris · socials · email · skills [lang|web|ml|infra] · pranav · neofetch · stats · matrix · font <name|list> · theme <name|list|random> · history [clear] · uptime · uname -a · sudo <cmd> · date · kleene · resume · whoami${customCmdList ? ` · ${customCmdList}` : ""} · clear · home\n(Type \`help <command>\` for detailed usage)`,
+            text: `commands: ls · open <project> · doom · snake · tetris · 2048 · socials · email · skills [lang|web|ml|infra] · pranav · neofetch · stats · matrix · font <name|list> · theme <name|list|random> · history [clear] · uptime · uname -a · sudo <cmd> · date · kleene · resume · whoami${customCmdList ? ` · ${customCmdList}` : ""} · clear · home\n(Type \`help <command>\` for detailed usage)`,
           });
         }
       } else {
@@ -546,7 +551,7 @@ export default function LaptopShowcase() {
     }
   };
 
-  const lineColor: Record<Exclude<LineKind, "cmd" | "list" | "neofetch" | "stats" | "emu" | "matrix" | "me" | "whoami" | "snake" | "tetris" | "doom">, string> =
+  const lineColor: Record<Exclude<LineKind, "cmd" | "list" | "neofetch" | "stats" | "emu" | "matrix" | "me" | "whoami" | "snake" | "tetris" | "2048" | "doom">, string> =
     useMemo(
       () => ({
         out: "text-[#b9cbe0]",
@@ -919,6 +924,9 @@ export default function LaptopShowcase() {
                         }
                         if (line.kind === "tetris") {
                           return <TetrisGame key={i} />;
+                        }
+                        if (line.kind === "2048") {
+                          return <Game2048 key={i} />;
                         }
                         if (line.kind === "doom") {
                           return <DoomPlayer key={i} onExit={() => run("clear")} />;
