@@ -1086,6 +1086,53 @@ export default function LaptopShowcase() {
           >
             <div className="absolute left-1/2 top-0 h-1.5 w-28 -translate-x-1/2 rounded-b-lg bg-[#7e858d]" />
           </div>
+
+          {/* why any of this is here */}
+          <div className="mx-auto mt-14 max-w-[720px] rounded-2xl border border-line bg-surface p-6 sm:p-7">
+            <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-ink-3">
+              Why there are games in here
+            </p>
+            <p className="mt-3 text-[15px] leading-relaxed text-ink-2">
+              A CV says I can build things; a terminal you can actually type into
+              shows it. Everything above — the shell, the games, the fake package
+              manager — is written from scratch in TypeScript and React with{" "}
+              <span className="font-medium text-ink">no game engine and no new dependencies</span>.
+              The only outside piece is DOOM, which is the 1993 binary running on a
+              WebAssembly DOS emulator.
+            </p>
+            <ul className="mt-5 grid gap-3 sm:grid-cols-2">
+              {[
+                {
+                  k: "Game loops",
+                  v: "Fixed-interval ticks that survive React re-renders, with the live state kept in refs so the timer never reads a stale board.",
+                },
+                {
+                  k: "The maths",
+                  v: "Tetris rotates by transposing a matrix and wall-kicks off the edges; 2048 implements one slide rule and rotates the board for the other three.",
+                },
+                {
+                  k: "Keyboard ownership",
+                  v: "Every game is mounted forever in the scrollback, so each one takes keys only while focused — otherwise a finished game eats what you type at the prompt.",
+                },
+                {
+                  k: "The solver next door",
+                  v: "The chess puzzles run a real forced-mate search, which is why a wrong move gets rejected instead of being waved through.",
+                },
+              ].map((item) => (
+                <li
+                  key={item.k}
+                  className="rounded-xl border border-line bg-bg p-4"
+                >
+                  <p className="font-mono text-[11px] uppercase tracking-[0.1em] text-accent-2">
+                    {item.k}
+                  </p>
+                  <p className="mt-1.5 text-[13px] leading-relaxed text-ink-2">
+                    {item.v}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
     </section>
