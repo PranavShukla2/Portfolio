@@ -653,7 +653,7 @@ export default function LaptopShowcase() {
   const showHome = view === "home" || minimized;
 
   return (
-    <section id="terminal" className="scroll-mt-[120px] pb-20 sm:pb-28">
+    <section id="terminal" className="scroll-mt-[120px] overflow-x-clip pb-20 sm:pb-28">
       <Divider />
       <div className="mx-auto mt-20 w-full max-w-page px-6 sm:mt-28 sm:px-8">
         <div className="mx-auto max-w-2xl text-center">
