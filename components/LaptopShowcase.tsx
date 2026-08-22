@@ -1088,7 +1088,7 @@ export default function LaptopShowcase() {
           </div>
 
           {/* why any of this is here */}
-          <div className="mx-auto mt-14 max-w-[720px] rounded-2xl border border-line bg-surface p-6 sm:p-7">
+          <div className="mx-auto mt-20 max-w-[720px] rounded-2xl border border-line bg-surface p-6 sm:mt-24 sm:p-7">
             <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-ink-3">
               Why there are games in here
             </p>
